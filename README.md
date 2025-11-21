@@ -2,6 +2,8 @@
 
 Neon Fragments is a web application that simulates a cyberpunk-themed blog. It's built with React, TypeScript, and Vite, and it uses the Gemini API to generate blog post content. The user interface is designed to be immersive and visually appealing, with a futuristic, cyberpunk aesthetic.
 
+**[Live Preview](https://ShinChven.github.io/neon-fragments-cyberpunk-blog/)**
+
 ## Features
 
 - **Cyberpunk UI:** The application features a dark, neon-lit user interface with a cyberpunk aesthetic.
