@@ -47,6 +47,7 @@ const App: React.FC = () => {
         activeItem={activeNav}
         onNavigate={handleNav}
         onToggleProfile={() => setIsProfileOpen(!isProfileOpen)}
+        isProfileOpen={isProfileOpen}
       />
 
       <main className="flex-grow container mx-auto max-w-7xl w-full md:px-4 py-6">
@@ -57,13 +58,7 @@ const App: React.FC = () => {
             fixed inset-0 z-40 bg-black pt-24 px-6 pb-6 overflow-y-auto transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:bg-transparent lg:p-0 lg:w-80 lg:block lg:h-fit
             ${isProfileOpen ? 'translate-x-0' : '-translate-x-full'}
           `}>
-             {/* Close button for mobile */}
-             <button 
-                className="lg:hidden absolute top-24 right-4 text-cyber-red hover:text-white transition-colors z-50"
-                onClick={() => setIsProfileOpen(false)}
-             >
-                <X className="w-8 h-8" />
-             </button>             <ProfileSidebar user={MOCK_USER} />
+             <ProfileSidebar user={MOCK_USER} />
 
              {/* Decorative Sidebar Elements */}
              <div className="mt-6 hidden lg:block">

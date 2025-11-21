@@ -1,15 +1,73 @@
 import React from 'react';
 import { NavItem } from '../types';
-import { Terminal, Radio, Settings, FolderOpen, Home } from 'lucide-react';
+import { Terminal, Radio, Settings, FolderOpen } from 'lucide-react';
 import GlitchText from './GlitchText';
 
 interface NavbarProps {
   activeItem: NavItem;
   onNavigate: (item: NavItem) => void;
   onToggleProfile?: () => void;
+  isProfileOpen?: boolean;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile }) => {
+const CyberMenuIcon = ({ className, isOpen }: { className?: string, isOpen?: boolean }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    className={className}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* Top Line */}
+    <path 
+      d="M2 6H22" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="square" 
+      className={`transition-all duration-300 origin-center ${isOpen ? 'translate-y-[6px] rotate-45' : ''}`}
+      style={{ transformBox: 'fill-box' }}
+    />
+    
+    {/* Middle Lines */}
+    <path 
+      d="M2 12H16" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="square" 
+      className={`transition-all duration-300 ${isOpen ? 'opacity-0 -translate-x-4' : 'opacity-100'}`}
+    />
+    <path 
+      d="M19 12H22" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="square" 
+      className={`transition-all duration-300 ${isOpen ? 'opacity-0 translate-x-4' : 'opacity-100'}`}
+    />
+    
+    {/* Bottom Line */}
+    <path 
+      d="M2 18H22" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="square" 
+      className={`transition-all duration-300 origin-center ${isOpen ? '-translate-y-[6px] -rotate-45' : ''}`}
+      style={{ transformBox: 'fill-box' }}
+    />
+    
+    {/* Decorative Rects */}
+    <rect 
+      x="20" y="4" width="2" height="4" 
+      fill="currentColor" 
+      className={`transition-all duration-300 ${isOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}
+    />
+    <rect 
+      x="2" y="16" width="2" height="4" 
+      fill="currentColor" 
+      className={`transition-all duration-300 ${isOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}
+    />
+  </svg>
+);
+
+const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile, isProfileOpen }) => {
   const navItems = [
     { id: NavItem.HOME, label: 'FEED', icon: Terminal },
     { id: NavItem.NET, label: 'NET', icon: Radio },
@@ -23,12 +81,12 @@ const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             {/* Mobile Profile Toggle */}
-            <button
-              className="md:hidden mr-4 text-cyber-yellow hover:text-cyber-cyan transition-colors"
+            <button 
+              className="md:hidden mr-4 text-cyber-yellow hover:text-cyber-cyan transition-colors z-50 relative"
               onClick={onToggleProfile}
               aria-label="Toggle Profile"
             >
-              <Home className="w-6 h-6" />
+              <CyberMenuIcon className="w-8 h-8" isOpen={isProfileOpen} />
             </button>
 
             <div className="flex-shrink-0 cursor-pointer" onClick={() => onNavigate(NavItem.HOME)}>
@@ -71,6 +129,4 @@ const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile
       <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-cyber-cyan to-transparent opacity-50"></div>
     </nav>
   );
-};
-
-export default Navbar;
+};export default Navbar;
