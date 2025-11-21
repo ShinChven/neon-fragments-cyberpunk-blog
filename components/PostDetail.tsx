@@ -96,7 +96,7 @@ const PostDetail: React.FC = () => {
       </Helmet>
 
       {/* Header Image / Banner Area */}
-      <div className="min-h-[300px] w-full bg-zinc-900 relative overflow-hidden flex flex-col justify-end">
+      <div className="w-full bg-zinc-900 relative overflow-hidden flex flex-col justify-end pt-4 md:pt-8">
          <div className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-overlay" style={{ backgroundImage: `url('${displayImage}')` }}></div>
          <div className="absolute inset-0 bg-gradient-to-t from-cyber-dark to-transparent"></div>
 
