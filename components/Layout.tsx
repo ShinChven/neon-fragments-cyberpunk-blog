@@ -7,8 +7,32 @@ import { NavItem } from '../types';
 
 const Layout: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [stats, setStats] = useState({ postCount: 0, tagCount: 0 });
   const location = useLocation();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const [postsRes, tagsRes] = await Promise.all([
+          fetch('/api/posts?limit=1'),
+          fetch('/api/tags')
+        ]);
+
+        if (postsRes.ok && tagsRes.ok) {
+          const postsData = await postsRes.json();
+          const tagsData = await tagsRes.json();
+          setStats({
+            postCount: postsData.total,
+            tagCount: tagsData.length
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch system stats:', error);
+      }
+    };
+    fetchStats();
+  }, []);
 
   // Determine active nav item based on path
   const activeNav = NAV_ITEMS.find(item => item.path === location.pathname)?.id || NavItem.HOME;
@@ -56,6 +80,14 @@ const Layout: React.FC = () => {
                       <div className="flex justify-between text-[10px] font-mono text-gray-500">
                          <span>TRACE_ROUTE</span>
                          <span className="text-red-500">BLOCKED</span>
+                      </div>
+                      <div className="flex justify-between text-[10px] font-mono text-gray-500">
+                         <span>DATA_FRAGMENTS</span>
+                         <span className="text-cyber-cyan">{stats.postCount}</span>
+                      </div>
+                      <div className="flex justify-between text-[10px] font-mono text-gray-500">
+                         <span>INDEX_NODES</span>
+                         <span className="text-cyber-yellow">{stats.tagCount}</span>
                       </div>
                       <div className="w-full bg-gray-900 h-1 mt-2">
                          <div className="bg-cyber-yellow h-full w-2/3 animate-pulse"></div>
