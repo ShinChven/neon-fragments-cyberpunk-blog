@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyber-yellow: #fcee0a;
+  --color-cyber-cyan: #00f0ff;
+  --color-cyber-red: #ff003c;
+  --color-cyber-black: #050505;
+  --color-cyber-dark: #121212;
+  --color-cyber-gray: #2a2a2a;
+
+  --font-display: "Rajdhani", sans-serif;
+  --font-mono: "Share Tech Mono", monospace;
+
+  --image-scanlines: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+}
+
+/* Custom styles from index.html */
+html {
+  overflow-y: scroll;
+}
+body {
+  background-color: #050505;
+  color: #e0e0e0;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+::-webkit-scrollbar-thumb {
+  background: #fcee0a;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00f0ff;
+}
+
+/* Glitch Animations */
+@keyframes glitch-skew {
+  0% { transform: skew(0deg); }
+  20% { transform: skew(-2deg); }
+  40% { transform: skew(2deg); }
+  60% { transform: skew(-1deg); }
+  80% { transform: skew(1deg); }
+  100% { transform: skew(0deg); }
+}
+
+.glitch-hover:hover {
+  animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+  color: #00f0ff;
+  text-shadow: 2px 0 #ff003c, -2px 0 #fcee0a;
+}
+
+.clip-corner {
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
+}
+
+.clip-corner-tr {
+  clip-path: polygon(0 0, 90% 0, 100% 15%, 100% 100%, 0 100%);
+}
+
+.clip-both {
+  clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
+}
