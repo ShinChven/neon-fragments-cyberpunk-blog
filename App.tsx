@@ -5,12 +5,14 @@ import PostList from './components/PostList';
 import PostDetail from './components/PostDetail';
 import { BlogPost, NavItem, ViewState } from './types';
 import { INITIAL_POSTS, MOCK_USER } from './constants';
+import { X } from 'lucide-react';
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewState>(ViewState.LIST);
   const [activeNav, setActiveNav] = useState<NavItem>(NavItem.HOME);
   const [posts, setPosts] = useState<BlogPost[]>(INITIAL_POSTS);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   // Simple effect to scroll top on view change
   useEffect(() => {
@@ -41,15 +43,28 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col font-sans text-gray-100 selection:bg-cyber-yellow selection:text-black">
-      <Navbar activeItem={activeNav} onNavigate={handleNav} />
+      <Navbar
+        activeItem={activeNav}
+        onNavigate={handleNav}
+        onToggleProfile={() => setIsProfileOpen(!isProfileOpen)}
+      />
 
       <main className="flex-grow container mx-auto max-w-7xl w-full md:px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
-          
-          {/* Sidebar - Sticky on Desktop */}
-          <aside className="w-full lg:w-80 flex-shrink-0 lg:sticky lg:top-24 h-fit">
-             <ProfileSidebar user={MOCK_USER} />
-             
+
+          {/* Sidebar - Sticky on Desktop, Drawer on Mobile */}
+          <aside className={`
+            fixed inset-0 z-40 bg-black pt-24 px-6 pb-6 overflow-y-auto transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:bg-transparent lg:p-0 lg:w-80 lg:block lg:h-fit
+            ${isProfileOpen ? 'translate-x-0' : '-translate-x-full'}
+          `}>
+             {/* Close button for mobile */}
+             <button 
+                className="lg:hidden absolute top-24 right-4 text-cyber-red hover:text-white transition-colors z-50"
+                onClick={() => setIsProfileOpen(false)}
+             >
+                <X className="w-8 h-8" />
+             </button>             <ProfileSidebar user={MOCK_USER} />
+
              {/* Decorative Sidebar Elements */}
              <div className="mt-6 hidden lg:block">
                 <div className="border border-gray-800 p-4 bg-black/40">
@@ -71,19 +86,27 @@ const App: React.FC = () => {
              </div>
           </aside>
 
+          {/* Overlay for mobile when open */}
+          {isProfileOpen && (
+            <div
+                className="fixed inset-0 bg-black/50 z-30 lg:hidden backdrop-blur-sm"
+                onClick={() => setIsProfileOpen(false)}
+            />
+          )}
+
           {/* Main Content Area */}
           <section className="flex-grow min-w-0">
              {view === ViewState.LIST ? (
-               <PostList 
-                  posts={posts} 
-                  onSelectPost={handlePostSelect} 
+               <PostList
+                  posts={posts}
+                  onSelectPost={handlePostSelect}
                   onPostGenerated={handleNewPost}
                />
              ) : (
                selectedPost && (
-                 <PostDetail 
-                    post={selectedPost} 
-                    onBack={handleBack} 
+                 <PostDetail
+                    post={selectedPost}
+                    onBack={handleBack}
                  />
                )
              )}

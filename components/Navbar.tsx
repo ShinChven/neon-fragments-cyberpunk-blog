@@ -1,14 +1,15 @@
 import React from 'react';
 import { NavItem } from '../types';
-import { Terminal, Radio, Settings, FolderOpen } from 'lucide-react';
+import { Terminal, Radio, Settings, FolderOpen, Home } from 'lucide-react';
 import GlitchText from './GlitchText';
 
 interface NavbarProps {
   activeItem: NavItem;
   onNavigate: (item: NavItem) => void;
+  onToggleProfile?: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate }) => {
+const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile }) => {
   const navItems = [
     { id: NavItem.HOME, label: 'FEED', icon: Terminal },
     { id: NavItem.NET, label: 'NET', icon: Radio },
@@ -20,13 +21,24 @@ const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate }) => {
     <nav className="sticky top-0 z-50 w-full bg-cyber-black/90 backdrop-blur-sm border-b border-cyber-gray/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0 cursor-pointer" onClick={() => onNavigate(NavItem.HOME)}>
-            <h1 className="text-3xl font-display font-bold italic tracking-tighter text-cyber-yellow">
-              <span className="text-cyber-cyan mr-1">NC</span>
-              NET<span className="text-white">_</span>LINK
-            </h1>
+          <div className="flex items-center">
+            {/* Mobile Profile Toggle */}
+            <button
+              className="md:hidden mr-4 text-cyber-yellow hover:text-cyber-cyan transition-colors"
+              onClick={onToggleProfile}
+              aria-label="Toggle Profile"
+            >
+              <Home className="w-6 h-6" />
+            </button>
+
+            <div className="flex-shrink-0 cursor-pointer" onClick={() => onNavigate(NavItem.HOME)}>
+              <h1 className="text-3xl font-display font-bold italic tracking-tighter text-cyber-yellow">
+                <span className="text-cyber-cyan mr-1">NC</span>
+                NET<span className="text-white">_</span>LINK
+              </h1>
+            </div>
           </div>
-          
+
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
               {navItems.map((item) => {
@@ -48,7 +60,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate }) => {
               })}
             </div>
           </div>
-          
+
           <div className="flex items-center">
              <div className="h-2 w-2 bg-green-500 rounded-full animate-ping mr-2"></div>
              <span className="text-xs font-mono text-green-500">ONLINE</span>
