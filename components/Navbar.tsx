@@ -11,57 +11,57 @@ interface NavbarProps {
 }
 
 const CyberMenuIcon = ({ className, isOpen }: { className?: string, isOpen?: boolean }) => (
-  <svg 
-    viewBox="0 0 24 24" 
-    fill="none" 
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
     className={className}
     xmlns="http://www.w3.org/2000/svg"
   >
     {/* Top Line */}
-    <path 
-      d="M2 6H22" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="square" 
+    <path
+      d="M2 6H22"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="square"
       className={`transition-all duration-300 origin-center ${isOpen ? 'translate-y-[6px] rotate-45' : ''}`}
       style={{ transformBox: 'fill-box' }}
     />
-    
+
     {/* Middle Lines */}
-    <path 
-      d="M2 12H16" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="square" 
+    <path
+      d="M2 12H16"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="square"
       className={`transition-all duration-300 ${isOpen ? 'opacity-0 -translate-x-4' : 'opacity-100'}`}
     />
-    <path 
-      d="M19 12H22" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="square" 
+    <path
+      d="M19 12H22"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="square"
       className={`transition-all duration-300 ${isOpen ? 'opacity-0 translate-x-4' : 'opacity-100'}`}
     />
-    
+
     {/* Bottom Line */}
-    <path 
-      d="M2 18H22" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="square" 
+    <path
+      d="M2 18H22"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="square"
       className={`transition-all duration-300 origin-center ${isOpen ? '-translate-y-[6px] -rotate-45' : ''}`}
       style={{ transformBox: 'fill-box' }}
     />
-    
+
     {/* Decorative Rects */}
-    <rect 
-      x="20" y="4" width="2" height="4" 
-      fill="currentColor" 
+    <rect
+      x="20" y="4" width="2" height="4"
+      fill="currentColor"
       className={`transition-all duration-300 ${isOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}
     />
-    <rect 
-      x="2" y="16" width="2" height="4" 
-      fill="currentColor" 
+    <rect
+      x="2" y="16" width="2" height="4"
+      fill="currentColor"
       className={`transition-all duration-300 ${isOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}
     />
   </svg>
@@ -81,7 +81,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             {/* Mobile Profile Toggle */}
-            <button 
+            <button
               className="md:hidden mr-4 text-cyber-yellow hover:text-cyber-cyan transition-colors z-50 relative"
               onClick={onToggleProfile}
               aria-label="Toggle Profile"
