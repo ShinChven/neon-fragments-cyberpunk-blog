@@ -5,7 +5,7 @@ Neon Fragments is a web application that simulates a cyberpunk-themed blog. It's
 ## Features
 
 - **Cyberpunk UI:** The application features a dark, neon-lit user interface with a cyberpunk aesthetic.
-- **Post Generation:** New blog posts can be generated using the Gemini API.
+- **Post Generation:** New blog posts are generated using a mock service (previously Gemini API).
 - **Component-Based Architecture:** The application is built with a modular, component-based architecture using React.
 - **Responsive Design:** The application is designed to be responsive and work on different screen sizes.
 
@@ -14,7 +14,6 @@ Neon Fragments is a web application that simulates a cyberpunk-themed blog. It's
 - **React:** A JavaScript library for building user interfaces.
 - **TypeScript:** A typed superset of JavaScript that compiles to plain JavaScript.
 - **Vite:** A fast build tool and development server for modern web projects.
-- **Gemini API:** Used to generate blog post content.
 - **D3:** Used for data visualization in the profile sidebar.
 - **Lucide React:** A library of simply designed icons.
 
@@ -31,7 +30,7 @@ Neon Fragments is a web application that simulates a cyberpunk-themed blog. It's
 
 ## Services
 
-- **`geminiService.ts`:** A service that interacts with the Gemini API to generate blog posts.
+- **`geminiService.ts`:** A service that generates mock blog posts.
 
 ## Getting Started
 
@@ -45,12 +44,7 @@ To run the application locally, follow these steps:
    ```bash
    npm install
    ```
-3. **Set up environment variables:**
-   Create a `.env.local` file in the root of the project and add your Gemini API key:
-   ```
-   API_KEY=your_gemini_api_key
-   ```
-4. **Run the development server:**
+3. **Run the development server:**
    ```bash
    npm run dev
    ```
