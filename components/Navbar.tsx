@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavItem } from '../types';
-import { Terminal, Radio, Settings, FolderOpen } from 'lucide-react';
+import { NAV_ITEMS } from '../constants';
 import GlitchText from './GlitchText';
 
 interface NavbarProps {
@@ -68,13 +68,6 @@ const CyberMenuIcon = ({ className, isOpen }: { className?: string, isOpen?: boo
 );
 
 const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile, isProfileOpen }) => {
-  const navItems = [
-    { id: NavItem.HOME, label: 'FEED', icon: Terminal },
-    { id: NavItem.NET, label: 'NET', icon: Radio },
-    { id: NavItem.FILES, label: 'DATA', icon: FolderOpen },
-    { id: NavItem.GEAR, label: 'GEAR', icon: Settings },
-  ];
-
   return (
     <nav className="sticky top-0 z-50 w-full bg-cyber-black/90 backdrop-blur-sm border-b border-cyber-gray/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -99,7 +92,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile
 
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
-              {navItems.map((item) => {
+              {NAV_ITEMS.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeItem === item.id;
                 return (

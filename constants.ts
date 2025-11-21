@@ -1,4 +1,12 @@
-import { BlogPost, UserProfile } from './types';
+import { BlogPost, UserProfile, NavItem } from './types';
+import { Terminal, Radio, Settings, FolderOpen } from 'lucide-react';
+
+export const NAV_ITEMS = [
+  { id: NavItem.HOME, label: 'FEED', icon: Terminal },
+  { id: NavItem.NET, label: 'NET', icon: Radio },
+  { id: NavItem.FILES, label: 'DATA', icon: FolderOpen },
+  { id: NavItem.GEAR, label: 'GEAR', icon: Settings },
+];
 
 export const MOCK_USER: UserProfile = {
   name: "V. MENDES",

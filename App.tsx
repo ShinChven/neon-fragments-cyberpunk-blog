@@ -58,7 +58,14 @@ const App: React.FC = () => {
             fixed inset-0 z-40 bg-black pt-24 px-6 pb-6 overflow-y-auto transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:bg-transparent lg:p-0 lg:w-80 lg:block lg:h-fit
             ${isProfileOpen ? 'translate-x-0' : '-translate-x-full'}
           `}>
-             <ProfileSidebar user={MOCK_USER} />
+             <ProfileSidebar
+                user={MOCK_USER}
+                activeItem={activeNav}
+                onNavigate={(item) => {
+                  handleNav(item);
+                  setIsProfileOpen(false); // Close drawer on mobile nav
+                }}
+             />
 
              {/* Decorative Sidebar Elements */}
              <div className="mt-6 hidden lg:block">

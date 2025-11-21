@@ -1,13 +1,17 @@
 import React, { useEffect, useRef } from 'react';
-import { UserProfile } from '../types';
+import { UserProfile, NavItem } from '../types';
 import { Shield, Cpu, Wifi, Battery } from 'lucide-react';
 import * as d3 from 'd3';
+import { NAV_ITEMS } from '../constants';
+import GlitchText from './GlitchText';
 
 interface ProfileSidebarProps {
   user: UserProfile;
+  activeItem?: NavItem;
+  onNavigate?: (item: NavItem) => void;
 }
 
-const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ user }) => {
+const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ user, activeItem, onNavigate }) => {
   const d3Container = useRef<SVGSVGElement>(null);
 
   // D3 Visualization for "Brain Activity"
@@ -50,7 +54,7 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ user }) => {
   }, []);
 
   return (
-    <div className="bg-cyber-black border border-cyber-gray/50 p-6 clip-corner-tr relative overflow-hidden">
+    <div className="bg-cyber-black border border-cyber-gray/50 p-6 clip-corner-tr relative overflow-hidden h-full flex flex-col">
       {/* Background grid effect */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(20,20,20,0.8)_1px,transparent_1px),linear-gradient(90deg,rgba(20,20,20,0.8)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none z-0 opacity-50"></div>
 
@@ -65,6 +69,8 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ user }) => {
             <span className="inline-block bg-cyber-red text-black text-[10px] px-1 font-bold mt-1">LVL {user.level}</span>
           </div>
         </div>
+
+
 
         <div className="mb-6">
           <p className="text-gray-400 text-sm font-mono leading-relaxed border-l-2 border-cyber-cyan pl-3 italic">
@@ -98,18 +104,43 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ user }) => {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-cyber-gray pt-4">
+        <div className="mt-8 border-t border-cyber-gray pt-4 hidden md:block">
           <h3 className="text-cyber-cyan font-bold mb-2 text-sm uppercase tracking-widest">NEURAL ACTIVITY</h3>
           <svg ref={d3Container} width="200" height="60" className="w-full overflow-visible"></svg>
         </div>
-
-        <div className="mt-4 flex space-x-2">
-             <button className="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-2 text-xs font-bold border border-gray-600 uppercase">Log</button>
-             <button className="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-2 text-xs font-bold border border-gray-600 uppercase">Ping</button>
-        </div>
       </div>
 
-      {/* Decorative Corner */}
+      <div className="mt-4 hidden md:flex space-x-2 relative z-10">
+           <button className="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-2 text-xs font-bold border border-gray-600 uppercase">Log</button>
+           <button className="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-2 text-xs font-bold border border-gray-600 uppercase">Ping</button>
+      </div>
+
+      {/* Mobile Navigation */}
+      <div className="md:hidden mt-6 border-t border-cyber-gray/50 pt-4 relative z-10 -mx-6">
+        <h3 className="text-cyber-cyan font-bold mb-4 text-sm uppercase tracking-widest px-6">NAVIGATION</h3>
+        <div className="flex flex-col">
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeItem === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => onNavigate?.(item.id)}
+                className={`
+                  w-full group flex items-center px-6 py-3 text-sm font-medium font-mono transition-colors duration-200 border-l-2 border-transparent
+                  ${isActive
+                    ? 'text-cyber-yellow bg-cyber-gray/30 border-l-cyber-yellow'
+                    : 'text-gray-400 hover:text-cyber-cyan hover:bg-cyber-gray/10 hover:border-l-cyber-cyan/30'}
+                `}
+              >
+                <Icon className={`w-4 h-4 mr-3 ${isActive ? 'animate-pulse' : 'group-hover:text-cyber-red'}`} />
+                <GlitchText text={item.label} />
+                {isActive && <div className="ml-auto w-2 h-2 bg-cyber-yellow rounded-full animate-ping" />}
+              </button>
+            );
+          })}
+        </div>
+      </div>      {/* Decorative Corner */}
       <div className="absolute top-0 right-0 p-2">
          <div className="w-2 h-2 bg-cyber-red"></div>
       </div>
