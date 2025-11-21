@@ -9,12 +9,15 @@ import NetPage from './components/NetPage';
 import GearPage from './components/GearPage';
 
 const GenericPage: React.FC<{ title: string }> = ({ title }) => (
-  <div className="p-8 text-center">
-    <h1 className="text-4xl font-display font-bold text-white mb-4">
-      <GlitchText text={title} />
-    </h1>
-    <div className="p-4 border border-cyber-yellow/30 bg-cyber-yellow/5 inline-block">
-      <p className="text-cyber-yellow font-mono">SYSTEM MESSAGE: SECTOR UNDER CONSTRUCTION</p>
+  <div className="min-h-[calc(100vh-100px)] p-4 md:p-8 flex flex-col items-center">
+    <div className="text-center mb-8 w-full max-w-4xl">
+      <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-2 tracking-tighter">
+        <GlitchText text={title} />
+      </h1>
+      <div className="h-1 w-24 bg-cyber-yellow mx-auto mb-4"></div>
+      <p className="text-cyber-cyan font-mono text-sm md:text-base tracking-widest">
+        SYSTEM MESSAGE // SECTOR UNDER CONSTRUCTION
+      </p>
     </div>
   </div>
 );

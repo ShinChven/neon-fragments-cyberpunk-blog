@@ -146,17 +146,14 @@ const GearPage: React.FC = () => {
       </div>
 
       <div className="max-w-7xl w-full mx-auto relative z-10">
-        <div className="mb-16 text-center relative">
-          <h1 className="text-6xl md:text-8xl font-display font-bold mb-2 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500">
-            <GlitchText text="GEAR_SET" />
+        <div className="text-center mb-8 w-full max-w-4xl mx-auto">
+          <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-2 tracking-tighter">
+            <GlitchText text="GEAR SET" />
           </h1>
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="h-[1px] w-12 bg-cyber-yellow"></div>
-            <p className="text-cyber-yellow font-mono tracking-[0.2em] text-sm">
-              SYSTEM_INTEGRITY: 100%
-            </p>
-            <div className="h-[1px] w-12 bg-cyber-yellow"></div>
-          </div>
+          <div className="h-1 w-24 bg-cyber-yellow mx-auto mb-4"></div>
+          <p className="text-cyber-cyan font-mono text-sm md:text-base tracking-widest">
+            SYSTEM INTEGRITY // 100%
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">

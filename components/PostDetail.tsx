@@ -96,11 +96,11 @@ const PostDetail: React.FC = () => {
       </Helmet>
 
       {/* Header Image / Banner Area */}
-      <div className="h-32 md:h-48 w-full bg-zinc-900 relative overflow-hidden">
+      <div className="min-h-[300px] w-full bg-zinc-900 relative overflow-hidden flex flex-col justify-end">
          <div className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-overlay" style={{ backgroundImage: `url('${displayImage}')` }}></div>
          <div className="absolute inset-0 bg-gradient-to-t from-cyber-dark to-transparent"></div>
 
-         <div className="absolute bottom-4 left-4 md:left-8">
+         <div className="relative z-10 w-full max-w-4xl mx-auto px-4 md:px-8 pb-8">
            <button onClick={() => navigate('/')} className="flex items-center text-cyber-cyan hover:text-white transition-colors font-mono text-sm mb-2 md:mb-4">
              <ArrowLeft className="w-4 h-4 mr-2" /> RETURN_TO_GRID
            </button>

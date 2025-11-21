@@ -60,9 +60,9 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             ))}
           </div>
 
-          <span className="text-cyber-yellow opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0 flex items-center text-sm font-bold uppercase font-mono">
+          <Link to={permalink} className="text-cyber-yellow opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0 flex items-center text-sm font-bold uppercase font-mono relative z-20">
             Read <ChevronRight className="w-4 h-4 ml-1" />
-          </span>
+          </Link>
         </div>
       </div>
     </div>
