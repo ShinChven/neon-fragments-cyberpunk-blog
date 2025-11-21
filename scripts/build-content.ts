@@ -58,7 +58,7 @@ async function buildContent() {
       content: htmlContent,
       description: data.description,
       date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
-      author: data.author || 'ShinChven',
+      author: data.author || 'z.shinchven',
       tags: data.tags || [],
       readTime: data.readTime || readTime,
       likes: data.likes || 0,

@@ -78,7 +78,7 @@ const PostDetail: React.FC = () => {
           </div>
           <div className="flex items-center space-x-2">
              <span>AUTHOR:</span>
-             <span className="text-white border border-gray-600 px-2 bg-gray-800">{post.author}</span>
+             <span className="text-white border border-gray-600 px-2 bg-gray-800 uppercase">{post.author}</span>
           </div>
         </div>
 
