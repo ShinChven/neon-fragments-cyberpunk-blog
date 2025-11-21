@@ -1,11 +1,9 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router';
-import * as HelmetAsyncPkg from 'react-helmet-async';
+import { HelmetProvider } from 'react-helmet-async';
 import { AppRoutes } from './AppRoutes';
 import { DataProvider } from './contexts/DataContext';
 import { BlogPost } from './types';
-
-const HelmetProvider = HelmetAsyncPkg.HelmetProvider || (HelmetAsyncPkg as any)['default']?.HelmetProvider;
 
 
 

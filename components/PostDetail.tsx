@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router';
-import * as HelmetAsyncPkg from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async';
 import { BlogPost } from '../types';
 import { useData } from '../contexts/DataContext';
 import { ArrowLeft, Share2, ThumbsUp, MessageSquare, AlertOctagon } from 'lucide-react';
@@ -8,8 +8,6 @@ import CyberButton from './CyberButton';
 import GlitchText from './GlitchText';
 import NotFound from './NotFound';
 import CyberDate from './CyberDate';
-
-const Helmet = HelmetAsyncPkg.Helmet || (HelmetAsyncPkg as any)['default']?.Helmet;
 
 
 
