@@ -18,9 +18,19 @@ server.get('*', (c) => {
   const postMatch = path.match(/^\/(\d{4})\/(\d{2})\/(\d{2})\/([^/]+)$/);
   if (postMatch) {
     const slug = postMatch[4];
-    const post = posts.find((p) => p.slug === slug);
-    if (post) {
-      initialPosts = [post];
+    const index = posts.findIndex((p) => p.slug === slug);
+    if (index !== -1) {
+      const post = posts[index];
+      const newerPost = index > 0 ? posts[index - 1] : null;
+      const olderPost = index < posts.length - 1 ? posts[index + 1] : null;
+
+      const postWithNav = {
+        ...post,
+        next: newerPost ? { slug: newerPost.slug, title: newerPost.title, date: newerPost.date } : undefined,
+        previous: olderPost ? { slug: olderPost.slug, title: olderPost.title, date: olderPost.date } : undefined
+      };
+
+      initialPosts = [postWithNav];
     }
   }
   // For home page or other pages, we keep initialPosts empty to avoid large payload

@@ -35,28 +35,28 @@ const PostDetail: React.FC = () => {
   }, [post, setProfile, resetProfile]);
 
   useEffect(() => {
-    if (!post && slug) {
-       // Fallback if not found in initial context (e.g. direct navigation to a new post not in initial payload?)
-       // For now, we rely on context. In a real app, we might fetch individual post here.
-       const found = posts.find(p => p.slug === slug);
-       if (found) {
-         setPost(found);
-         setLoading(false);
-       } else {
-         fetch(`/api/posts/${slug}`)
-           .then(res => {
-             if (res.ok) return res.json();
-             throw new Error('Post not found');
-           })
-           .then(data => {
-             setPost(data);
-             setLoading(false);
-           })
-           .catch(err => {
-             console.error(err);
-             setLoading(false);
-           });
-       }
+    if (post?.slug === slug) return;
+
+    setLoading(true);
+    const found = posts.find(p => p.slug === slug);
+    if (found) {
+      setPost(found);
+      setLoading(false);
+    } else if (slug) {
+      fetch(`/api/posts/${slug}`)
+        .then(res => {
+          if (res.ok) return res.json();
+          throw new Error('Post not found');
+        })
+        .then(data => {
+          setPost(data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error(err);
+          setLoading(false);
+          setPost(null);
+        });
     }
   }, [slug, posts, post]);
 
@@ -225,6 +225,24 @@ const PostDetail: React.FC = () => {
   const defaultImage = "https://picsum.photos/1200/400";
   const displayImage = post.image || defaultImage;
 
+  // Calculate Previous and Next posts
+  // 1. Try to get from post object (SSR or API detail fetch)
+  // 2. Fallback to calculating from posts context (Client-side navigation from list)
+  const currentIndex = posts.findIndex(p => p.slug === slug);
+  const contextNewer = currentIndex > 0 ? posts[currentIndex - 1] : null;
+  const contextOlder = currentIndex !== -1 && currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
+
+  const newerPost = post.next || contextNewer;
+  const olderPost = post.previous || contextOlder;
+
+  const getPostUrl = (p: { date: string; slug: string }) => {
+    const d = new Date(p.date);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `/${y}/${m}/${day}/${p.slug}`;
+  };
+
   // Use the dynamic card generation URL
   // Format: /card/YYYY/MM/DD/slug.png
   const dateObj = new Date(post.date);
@@ -331,6 +349,51 @@ const PostDetail: React.FC = () => {
                 <Share2 className="w-4 h-4" />
               </CyberButton>
            </div>
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="flex flex-row justify-between mt-8 gap-4">
+           {olderPost ? (
+             <Link to={getPostUrl(olderPost)} className="flex-1 min-w-0 group">
+               <div className="border border-gray-800 bg-gray-900/50 p-4 hover:border-cyber-cyan transition-all h-full flex flex-col items-start relative overflow-hidden clip-corner">
+                 <div className="absolute inset-0 bg-cyber-cyan/5 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300"></div>
+                 <span className="text-xs font-mono text-gray-500 mb-2 group-hover:text-cyber-cyan relative z-10 flex items-center">
+                   <ArrowLeft className="w-3 h-3 mr-1" /> PREVIOUS_DATA
+                 </span>
+                 <span className="font-display text-lg text-white group-hover:text-cyber-yellow truncate w-full text-left relative z-10">{olderPost.title}</span>
+               </div>
+             </Link>
+           ) : (
+             <div className="flex-1 min-w-0 opacity-50 cursor-not-allowed select-none">
+               <div className="border border-gray-800 bg-gray-900/20 p-4 h-full flex flex-col items-start relative overflow-hidden clip-corner">
+                 <span className="text-xs font-mono text-gray-600 mb-2 relative z-10 flex items-center">
+                   <ArrowLeft className="w-3 h-3 mr-1" /> PREVIOUS_DATA
+                 </span>
+                 <span className="font-display text-lg text-gray-600 truncate w-full text-left relative z-10">END_OF_ARCHIVE</span>
+               </div>
+             </div>
+           )}
+
+           {newerPost ? (
+             <Link to={getPostUrl(newerPost)} className="flex-1 min-w-0 group">
+               <div className="border border-gray-800 bg-gray-900/50 p-4 hover:border-cyber-cyan transition-all h-full flex flex-col items-end text-right relative overflow-hidden clip-corner">
+                 <div className="absolute inset-0 bg-cyber-cyan/5 translate-x-[100%] group-hover:translate-x-0 transition-transform duration-300"></div>
+                 <span className="text-xs font-mono text-gray-500 mb-2 group-hover:text-cyber-cyan relative z-10 flex items-center">
+                   NEXT_DATA <ArrowLeft className="w-3 h-3 ml-1 rotate-180" />
+                 </span>
+                 <span className="font-display text-lg text-white group-hover:text-cyber-yellow truncate w-full text-right relative z-10">{newerPost.title}</span>
+               </div>
+             </Link>
+           ) : (
+             <div className="flex-1 min-w-0 opacity-50 cursor-not-allowed select-none">
+               <div className="border border-gray-800 bg-gray-900/20 p-4 h-full flex flex-col items-end text-right relative overflow-hidden clip-corner">
+                 <span className="text-xs font-mono text-gray-600 mb-2 relative z-10 flex items-center">
+                   NEXT_DATA <ArrowLeft className="w-3 h-3 ml-1 rotate-180" />
+                 </span>
+                 <span className="font-display text-lg text-gray-600 truncate w-full text-right relative z-10">NO_FUTURE_DATA</span>
+               </div>
+             </div>
+           )}
         </div>
       </div>
     </div>

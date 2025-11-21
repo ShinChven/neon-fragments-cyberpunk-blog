@@ -86,11 +86,23 @@ app.get('/api/posts', (c) => {
 
 app.get('/api/posts/:slug', (c) => {
   const slug = c.req.param('slug');
-  const post = posts.find((p) => p.slug === slug);
-  if (!post) {
+  const index = posts.findIndex((p) => p.slug === slug);
+
+  if (index === -1) {
     return c.json({ error: 'Post not found' }, 404);
   }
-  return c.json(post);
+
+  const post = posts[index];
+  const newerPost = index > 0 ? posts[index - 1] : null;
+  const olderPost = index < posts.length - 1 ? posts[index + 1] : null;
+
+  const response = {
+    ...post,
+    next: newerPost ? { slug: newerPost.slug, title: newerPost.title, date: newerPost.date } : undefined,
+    previous: olderPost ? { slug: olderPost.slug, title: olderPost.title, date: olderPost.date } : undefined
+  };
+
+  return c.json(response);
 });
 
 export default app;

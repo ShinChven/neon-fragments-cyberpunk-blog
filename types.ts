@@ -11,6 +11,8 @@ export interface BlogPost {
   readTime: string;
   likes: number;
   isGlitch?: boolean;
+  previous?: { slug: string; title: string; date: string };
+  next?: { slug: string; title: string; date: string };
 }
 
 export interface UserProfile {
