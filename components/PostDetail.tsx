@@ -9,6 +9,7 @@ import CyberButton from './CyberButton';
 import GlitchText from './GlitchText';
 import NotFound from './NotFound';
 import CyberDate from './CyberDate';
+import ShareModal from './ShareModal';
 
 
 
@@ -24,6 +25,7 @@ const PostDetail: React.FC = () => {
   const foundPost = posts.find(p => p.slug === slug);
   const [post, setPost] = useState<BlogPost | null>(foundPost || null);
   const [loading, setLoading] = useState(!foundPost);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   useEffect(() => {
     if (post) {
@@ -345,7 +347,7 @@ const PostDetail: React.FC = () => {
 
            <div className="flex items-center space-x-4">
               <span className="text-gray-500 font-mono text-xs uppercase">Share Node:</span>
-              <CyberButton variant="secondary" className="py-2 px-4">
+              <CyberButton variant="secondary" className="py-2 px-4" onClick={() => setIsShareModalOpen(true)}>
                 <Share2 className="w-4 h-4" />
               </CyberButton>
            </div>
@@ -354,48 +356,57 @@ const PostDetail: React.FC = () => {
         {/* Navigation Buttons */}
         <div className="flex flex-row justify-between mt-8 gap-4">
            {olderPost ? (
-             <Link to={getPostUrl(olderPost)} className="flex-1 min-w-0 group">
+             <Link to={getPostUrl(olderPost)} className="flex-1 group">
                <div className="border border-gray-800 bg-gray-900/50 p-4 hover:border-cyber-cyan transition-all h-full flex flex-col items-start relative overflow-hidden clip-corner">
                  <div className="absolute inset-0 bg-cyber-cyan/5 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300"></div>
                  <span className="text-xs font-mono text-gray-500 mb-2 group-hover:text-cyber-cyan relative z-10 flex items-center">
                    <ArrowLeft className="w-3 h-3 mr-1" /> PREVIOUS_DATA
                  </span>
-                 <span className="font-display text-lg text-white group-hover:text-cyber-yellow truncate w-full text-left relative z-10">{olderPost.title}</span>
+                 <span className="font-display text-lg text-white group-hover:text-cyber-yellow w-full text-left relative z-10">{olderPost.title}</span>
                </div>
              </Link>
            ) : (
-             <div className="flex-1 min-w-0 opacity-50 cursor-not-allowed select-none">
+             <div className="flex-1 opacity-50 cursor-not-allowed select-none">
                <div className="border border-gray-800 bg-gray-900/20 p-4 h-full flex flex-col items-start relative overflow-hidden clip-corner">
                  <span className="text-xs font-mono text-gray-600 mb-2 relative z-10 flex items-center">
                    <ArrowLeft className="w-3 h-3 mr-1" /> PREVIOUS_DATA
                  </span>
-                 <span className="font-display text-lg text-gray-600 truncate w-full text-left relative z-10">END_OF_ARCHIVE</span>
+                 <span className="font-display text-lg text-gray-600 w-full text-left relative z-10">END_OF_ARCHIVE</span>
                </div>
              </div>
            )}
 
            {newerPost ? (
-             <Link to={getPostUrl(newerPost)} className="flex-1 min-w-0 group">
+             <Link to={getPostUrl(newerPost)} className="flex-1 group">
                <div className="border border-gray-800 bg-gray-900/50 p-4 hover:border-cyber-cyan transition-all h-full flex flex-col items-end text-right relative overflow-hidden clip-corner">
                  <div className="absolute inset-0 bg-cyber-cyan/5 translate-x-[100%] group-hover:translate-x-0 transition-transform duration-300"></div>
                  <span className="text-xs font-mono text-gray-500 mb-2 group-hover:text-cyber-cyan relative z-10 flex items-center">
                    NEXT_DATA <ArrowLeft className="w-3 h-3 ml-1 rotate-180" />
                  </span>
-                 <span className="font-display text-lg text-white group-hover:text-cyber-yellow truncate w-full text-right relative z-10">{newerPost.title}</span>
+                 <span className="font-display text-lg text-white group-hover:text-cyber-yellow w-full text-right relative z-10">{newerPost.title}</span>
                </div>
              </Link>
            ) : (
-             <div className="flex-1 min-w-0 opacity-50 cursor-not-allowed select-none">
+             <div className="flex-1 opacity-50 cursor-not-allowed select-none">
                <div className="border border-gray-800 bg-gray-900/20 p-4 h-full flex flex-col items-end text-right relative overflow-hidden clip-corner">
                  <span className="text-xs font-mono text-gray-600 mb-2 relative z-10 flex items-center">
                    NEXT_DATA <ArrowLeft className="w-3 h-3 ml-1 rotate-180" />
                  </span>
-                 <span className="font-display text-lg text-gray-600 truncate w-full text-right relative z-10">NO_FUTURE_DATA</span>
+                 <span className="font-display text-lg text-gray-600 w-full text-right relative z-10">NO_FUTURE_DATA</span>
                </div>
              </div>
            )}
         </div>
       </div>
+
+      {post && (
+        <ShareModal
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
+          title={post.title}
+          url={currentUrl}
+        />
+      )}
     </div>
   );
 };export default PostDetail;
