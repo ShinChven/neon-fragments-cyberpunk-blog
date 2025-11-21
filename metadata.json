@@ -1,0 +1,5 @@
+{
+  "name": "Neon Fragments: Cyberpunk Blog",
+  "description": "A futuristic, immersive Cyberpunk 2077-inspired blog interface featuring dynamic content generation via Gemini API, glitched aesthetics, and a react-based netrunner UI.",
+  "requestFramePermissions": []
+}
