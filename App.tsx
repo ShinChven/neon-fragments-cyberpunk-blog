@@ -5,7 +5,9 @@ import { AppRoutes } from './AppRoutes';
 import { DataProvider } from './contexts/DataContext';
 import { BlogPost } from './types';
 
-const { HelmetProvider } = (HelmetAsyncPkg as any).default || HelmetAsyncPkg;
+const HelmetProvider = HelmetAsyncPkg.HelmetProvider || (HelmetAsyncPkg as any)['default']?.HelmetProvider;
+
+
 
 
 interface AppProps {

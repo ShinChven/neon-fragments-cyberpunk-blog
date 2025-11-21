@@ -9,7 +9,9 @@ import GlitchText from './GlitchText';
 import NotFound from './NotFound';
 import CyberDate from './CyberDate';
 
-const { Helmet } = (HelmetAsyncPkg as any).default || HelmetAsyncPkg;
+const Helmet = HelmetAsyncPkg.Helmet || (HelmetAsyncPkg as any)['default']?.Helmet;
+
+
 
 
 const PostDetail: React.FC = () => {
