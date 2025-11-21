@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router';
 import { BlogPost } from '../types';
-import { INITIAL_POSTS } from '../constants';
+import { useData } from '../contexts/DataContext';
 import { ArrowLeft, Share2, ThumbsUp, MessageSquare, AlertOctagon } from 'lucide-react';
 import CyberButton from './CyberButton';
 import GlitchText from './GlitchText';
@@ -10,19 +10,26 @@ import NotFound from './NotFound';
 const PostDetail: React.FC = () => {
   const { year, month, day, slug } = useParams<{ year: string; month: string; day: string; slug: string }>();
   const navigate = useNavigate();
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { posts } = useData();
+
+  // Initialize directly from context for SSR support
+  const foundPost = posts.find(p => p.slug === slug);
+  const [post, setPost] = useState<BlogPost | null>(foundPost || null);
+  const [loading, setLoading] = useState(!foundPost);
 
   useEffect(() => {
-    // Simulate fetching or finding the post
-    const foundPost = INITIAL_POSTS.find(p => p.slug === slug);
-    // In a real app, we would also validate the date
-
-    if (foundPost) {
-      setPost(foundPost);
+    if (!post && slug) {
+       // Fallback if not found in initial context (e.g. direct navigation to a new post not in initial payload?)
+       // For now, we rely on context. In a real app, we might fetch individual post here.
+       const found = posts.find(p => p.slug === slug);
+       if (found) {
+         setPost(found);
+         setLoading(false);
+       } else {
+         setLoading(false);
+       }
     }
-    setLoading(false);
-  }, [slug]);
+  }, [slug, posts, post]);
 
   if (loading) {
     return <div className="text-white text-center mt-20">DECRYPTING DATA STREAM...</div>;
@@ -64,9 +71,10 @@ const PostDetail: React.FC = () => {
 
         {/* Content */}
         <article className="prose prose-invert prose-lg max-w-none mb-12">
-          <div className="text-gray-300 leading-relaxed font-sans whitespace-pre-line">
-            {post.content}
-          </div>
+          <div
+            className="text-gray-300 leading-relaxed font-sans"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
 
           {post.isGlitch && (
             <div className="mt-8 p-4 border border-cyber-red/50 bg-cyber-red/5 flex items-start space-x-3">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BlogPost } from '../types';
-import { INITIAL_POSTS } from '../constants';
+import { useData } from '../contexts/DataContext';
 import PostCard from './PostCard';
 import { Search } from 'lucide-react';
 
@@ -8,7 +8,9 @@ interface PostListProps {
   posts?: BlogPost[];
 }
 
-const PostList: React.FC<PostListProps> = ({ posts = INITIAL_POSTS }) => {
+const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
+  const { posts: contextPosts } = useData();
+  const posts = propPosts || contextPosts || [];
   const [searchQuery, setSearchQuery] = useState('');
 
   return (

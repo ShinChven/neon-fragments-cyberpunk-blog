@@ -3,6 +3,7 @@ export interface BlogPost {
   title: string;
   slug: string;
   content: string;
+  description?: string;
   date: string;
   author: string;
   tags: string[];

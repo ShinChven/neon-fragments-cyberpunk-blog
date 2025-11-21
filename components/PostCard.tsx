@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { BlogPost } from '../types';
 import { Clock, Hash, ChevronRight, AlertTriangle } from 'lucide-react';
 
@@ -38,7 +38,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </h3>
 
         <p className="text-gray-400 line-clamp-2 font-sans mb-4 text-sm">
-          {post.content}
+          {post.description || post.content.replace(/<[^>]*>?/gm, '')}
         </p>
 
         <div className="flex justify-between items-end">
