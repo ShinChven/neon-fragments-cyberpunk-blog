@@ -1,7 +1,31 @@
 import { Hono } from 'hono';
 import posts from '../services/posts.json';
+import { generateOgImage } from './og-image';
 
 const app = new Hono();
+
+app.get('/card/:year/:month/:day/:slug', async (c) => {
+  const { year, month, day, slug: rawSlug } = c.req.param();
+  const slug = rawSlug.endsWith('.png') ? rawSlug.slice(0, -4) : rawSlug;
+
+  // We can verify the date if needed, but slug is usually unique enough or we just find by slug
+  const post = posts.find((p) => p.slug === slug);
+
+  if (!post) {
+    return c.text('Post not found', 404);
+  }
+
+  try {
+    const imageBuffer = await generateOgImage(post);
+    return c.body(imageBuffer as unknown as ArrayBuffer, 200, {
+      'Content-Type': 'image/png',
+      'Cache-Control': 'public, max-age=86400', // Cache for 1 day
+    });
+  } catch (e) {
+    console.error(e);
+    return c.text('Failed to generate image', 500);
+  }
+});
 
 app.get('/api/tags', (c) => {
   const tagCounts: Record<string, number> = {};

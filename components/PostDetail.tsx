@@ -57,20 +57,19 @@ const PostDetail: React.FC = () => {
     return <NotFound />;
   }
 
-  const baseUrl = 'https://neon-fragments.com';
+  const baseUrl = 'https://atlassc.net';
   const currentUrl = `${baseUrl}${location.pathname}`;
   const defaultImage = "https://picsum.photos/1200/400";
   const displayImage = post.image || defaultImage;
 
-  let ogImage = defaultImage;
-  if (post.image) {
-    if (post.image.startsWith('http')) {
-      ogImage = post.image;
-    } else {
-      const cleanPath = post.image.startsWith('/') ? post.image : `/${post.image}`;
-      ogImage = `${baseUrl}${cleanPath}`;
-    }
-  }
+  // Use the dynamic card generation URL
+  // Format: /card/YYYY/MM/DD/slug.png
+  const dateObj = new Date(post.date);
+  const yearStr = dateObj.getFullYear();
+  const monthStr = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const dayStr = String(dateObj.getDate()).padStart(2, '0');
+  const ogImage = `${baseUrl}/card/${yearStr}/${monthStr}/${dayStr}/${post.slug}.png`;
+
   const plainTextContent = post.content.replace(/<[^>]+>/g, '');
   const description = post.description || plainTextContent.substring(0, 150) + '...';
 
