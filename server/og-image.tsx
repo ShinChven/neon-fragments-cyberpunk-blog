@@ -141,7 +141,7 @@ export async function generateOgImage(post: BlogPost) {
                 <span style={{ margin: '0 4px', color: '#666' }}>::</span>
                 <span style={{ color: colors.white }}>{day}</span>
             </div>
-            <span style={{ color: colors.cyan }}>// {post.author.toUpperCase()}</span>
+            <span style={{ color: colors.cyan }}>// {post.author.name.toUpperCase()}</span>
           </div>
 
           <h1 style={{

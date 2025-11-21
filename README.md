@@ -93,5 +93,56 @@ The project is configured for **Cloudflare Workers**.
 1.  Run `npm run build`.
 2.  Deploy using Wrangler (configuration required in `wrangler.toml`).
 
+## 📝 Markdown Frontmatter Guide
+
+The blog posts in `_posts/` support the following YAML frontmatter fields:
+
+| Field | Type | Description | Default |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | The title of the post. | `"Untitled"` |
+| `slug` | `string` | The URL slug for the post. | Filename (without extension) |
+| `date` | `string` | Publication date (ISO 8601 format recommended). | Current build time |
+| `description` | `string` | Short summary for the feed and SEO. | First 200 characters of content |
+| `author` | `string` \| `object` | The author's name or full profile object. | `DEFAULT_AUTHOR` |
+| `tags` | `string[]` | List of tags for categorization. | `[]` |
+| `image` | `string` | URL to a cover image. | `undefined` |
+| `readTime` | `string` | Estimated read time (e.g., "5 min read"). | Calculated from word count |
+| `likes` | `number` | Initial like count. | `0` |
+| `isGlitch` | `boolean` | Applies a glitch visual effect to the post card. | `false` |
+| `id` | `string` | Unique identifier. | Random UUID |
+
+**Example:**
+
+```yaml
+---
+title: "Neural Link Protocols"
+slug: "neural-link-protocols"
+date: "2077-09-15T14:30:00Z"
+description: "An in-depth look at the new protocols for direct neural interfacing."
+author: "V. Mendes"
+tags: ["tech", "neural-link", "cyberware"]
+image: "/images/neural-link.jpg"
+isGlitch: true
+---
+```
+
+**Advanced Author Example:**
+
+```yaml
+---
+title: "Deep Dive: NetWatch Protocols"
+author:
+  name: "Agent Mosley"
+  handle: "@NetWatch_Official"
+  role: "ENFORCER"
+  level: 99
+  bio: "Watching the wall. Keeping the black ICE frozen."
+  stats:
+    ram: 128
+    cpu: 95
+    network: 100
+---
+```
+
 ---
 *System Status: ONLINE // Connection Secure*

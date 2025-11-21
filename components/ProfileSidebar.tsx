@@ -65,8 +65,17 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ user, activeItem, onNav
           </div>
           <div>
             <h2 className="text-2xl font-display font-bold text-white leading-none">{user.name}</h2>
-            <p className="text-cyber-yellow font-mono text-sm">{user.handle}</p>
-            <span className="inline-block bg-cyber-red text-black text-[10px] px-1 font-bold mt-1">LVL {user.level}</span>
+            {user.handle_link ? (
+              <a href={user.handle_link} target="_blank" rel="noopener noreferrer" className="block text-cyber-yellow font-mono text-sm hover:underline hover:text-cyber-cyan transition-colors">
+                {user.handle}
+              </a>
+            ) : (
+              <div className="block text-cyber-yellow font-mono text-sm">{user.handle}</div>
+            )}
+            <div className="flex space-x-2 mt-1">
+              <span className="inline-block bg-cyber-red text-black text-[10px] px-1 font-bold">LVL {user.level}</span>
+              <span className="inline-block border border-cyber-cyan text-cyber-cyan text-[10px] px-1 font-bold uppercase">{user.role}</span>
+            </div>
           </div>
         </div>
 
@@ -110,10 +119,7 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ user, activeItem, onNav
         </div>
       </div>
 
-      <div className="mt-4 hidden md:flex space-x-2 relative z-10">
-           <button className="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-2 text-xs font-bold border border-gray-600 uppercase">Log</button>
-           <button className="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-2 text-xs font-bold border border-gray-600 uppercase">Ping</button>
-      </div>
+
 
       {/* Mobile Navigation */}
       <div className="md:hidden mt-6 border-t border-cyber-gray/50 pt-4 relative z-10 -mx-6">

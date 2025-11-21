@@ -6,7 +6,7 @@ export interface BlogPost {
   description?: string;
   image?: string;
   date: string;
-  author: string;
+  author: UserProfile;
   tags: string[];
   readTime: string;
   likes: number;
@@ -16,6 +16,7 @@ export interface BlogPost {
 export interface UserProfile {
   name: string;
   handle: string;
+  handle_link?: string;
   role: string;
   level: number;
   bio: string;

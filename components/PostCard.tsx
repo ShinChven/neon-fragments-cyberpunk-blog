@@ -35,7 +35,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <div className="flex items-center space-x-2 text-xs font-mono text-gray-500">
             <Clock className="w-3 h-3" />
             <CyberDate date={post.date} />
-            <span className="text-cyber-cyan uppercase"> // {post.author}</span>
+            <span className="text-cyber-cyan uppercase"> // {post.author.name}</span>
           </div>
           {post.isGlitch && <AlertTriangle className="w-4 h-4 text-cyber-red animate-pulse" />}
         </div>

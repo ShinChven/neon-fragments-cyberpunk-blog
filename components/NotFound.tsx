@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router';
 import { AlertTriangle } from 'lucide-react';
 import GlitchText from './GlitchText';
+import { useProfile } from '../contexts/ProfileContext';
 
 const NotFound: React.FC = () => {
+  const { resetProfile } = useProfile();
+
+  useEffect(() => {
+    resetProfile();
+  }, [resetProfile]);
+
   return (
     <div className="flex flex-col items-center justify-center h-full py-20 text-center">
       <div className="relative mb-8">

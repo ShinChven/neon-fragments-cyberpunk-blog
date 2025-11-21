@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import GlitchText from './GlitchText';
+import { useProfile } from '../contexts/ProfileContext';
 
 const techStack = [
   {
@@ -137,6 +138,12 @@ const GlitchCard: React.FC<{ tech: typeof techStack[0] }> = ({ tech }) => {
 };
 
 const GearPage: React.FC = () => {
+  const { resetProfile } = useProfile();
+
+  useEffect(() => {
+    resetProfile();
+  }, [resetProfile]);
+
   return (
     <div className="min-h-[calc(100vh-100px)] p-4 md:p-8 text-white flex flex-col items-center relative overflow-hidden">
       {/* Background Elements */}

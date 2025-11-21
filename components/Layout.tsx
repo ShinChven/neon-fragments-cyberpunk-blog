@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
 import Navbar from './Navbar';
 import ProfileSidebar from './ProfileSidebar';
-import { MOCK_USER, NAV_ITEMS } from '../constants';
+import { NAV_ITEMS } from '../constants';
 import { NavItem } from '../types';
+import { useProfile } from '../contexts/ProfileContext';
 
 const Layout: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [stats, setStats] = useState({ postCount: 0, tagCount: 0 });
+  const { user } = useProfile();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -48,7 +50,7 @@ const Layout: React.FC = () => {
   const sidebarContent = (
     <>
       <ProfileSidebar
-        user={MOCK_USER}
+        user={user}
         activeItem={activeNav}
         onNavigate={handleNav}
       />
@@ -102,7 +104,7 @@ const Layout: React.FC = () => {
             ${isProfileOpen ? 'translate-x-0' : '-translate-x-full'}
           `}>
              <ProfileSidebar
-                user={MOCK_USER}
+                user={user}
                 activeItem={activeNav}
                 onNavigate={handleNav}
              />

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router';
 import { BlogPost } from '../types';
 import { useData } from '../contexts/DataContext';
+import { useProfile } from '../contexts/ProfileContext';
 import PostCard from './PostCard';
 import { Search, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
@@ -11,6 +12,7 @@ interface PostListProps {
 
 const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
   const { posts: contextPosts } = useData();
+  const { resetProfile } = useProfile();
   const [posts, setPosts] = useState<BlogPost[]>(propPosts || contextPosts || []);
   const [loading, setLoading] = useState(true);
 
@@ -20,6 +22,10 @@ const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
   const tagQuery = searchParams.get('tags') || searchParams.get('tag') || '';
   const [totalPages, setTotalPages] = useState(1);
   const [inputValue, setInputValue] = useState(searchQuery);
+
+  useEffect(() => {
+    resetProfile();
+  }, [resetProfile]);
 
   useEffect(() => {
     setInputValue(searchQuery);

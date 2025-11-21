@@ -3,6 +3,8 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import fg from 'fast-glob';
+import { DEFAULT_AUTHOR } from '../constants';
+import { UserProfile } from '../types';
 
 const CONTENT_DIR = process.env.CONTENT_DIR || '_posts';
 const OUTPUT_FILE = path.join(process.cwd(), 'services', 'posts.json');
@@ -16,7 +18,7 @@ interface BlogPost {
   image?: string;
   excerpt?: string;
   date: string;
-  author: string;
+  author: UserProfile;
   tags: string[];
   readTime: string;
   likes: number;
@@ -52,6 +54,15 @@ async function buildContent() {
 
     const htmlContent = await marked(content);
 
+    let author: UserProfile = DEFAULT_AUTHOR;
+    if (data.author) {
+      if (typeof data.author === 'string') {
+        author = { ...DEFAULT_AUTHOR, name: data.author };
+      } else if (typeof data.author === 'object') {
+        author = data.author as UserProfile;
+      }
+    }
+
     posts.push({
       id: data.id || crypto.randomUUID(),
       title: data.title || 'Untitled',
@@ -60,7 +71,7 @@ async function buildContent() {
       description: data.description,
       image: data.image,
       date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
-      author: data.author || 'z.shinchven',
+      author: author,
       tags: data.tags || [],
       readTime: data.readTime || readTime,
       likes: data.likes || 0,

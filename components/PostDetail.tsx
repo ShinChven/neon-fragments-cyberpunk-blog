@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link, useLocation } from 'react-router';
 import { Helmet } from 'react-helmet-async';
 import { BlogPost } from '../types';
 import { useData } from '../contexts/DataContext';
+import { useProfile } from '../contexts/ProfileContext';
 import { ArrowLeft, Share2, ThumbsUp, MessageSquare, AlertOctagon } from 'lucide-react';
 import CyberButton from './CyberButton';
 import GlitchText from './GlitchText';
@@ -17,11 +18,21 @@ const PostDetail: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { posts } = useData();
+  const { setProfile, resetProfile } = useProfile();
 
   // Initialize directly from context for SSR support
   const foundPost = posts.find(p => p.slug === slug);
   const [post, setPost] = useState<BlogPost | null>(foundPost || null);
   const [loading, setLoading] = useState(!foundPost);
+
+  useEffect(() => {
+    if (post) {
+      setProfile(post.author);
+    }
+    return () => {
+      resetProfile();
+    };
+  }, [post, setProfile, resetProfile]);
 
   useEffect(() => {
     if (!post && slug) {
@@ -118,7 +129,7 @@ const PostDetail: React.FC = () => {
           </div>
           <div className="flex items-center space-x-2">
              <span>AUTHOR:</span>
-             <span className="text-white border border-gray-600 px-2 bg-gray-800 uppercase">{post.author}</span>
+             <span className="text-white border border-gray-600 px-2 bg-gray-800 uppercase">{post.author.name}</span>
           </div>
         </div>
 
