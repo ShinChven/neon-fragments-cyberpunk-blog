@@ -9,6 +9,22 @@ Neon Fragments is a web application that simulates a cyberpunk-themed blog. It's
 - **Component-Based Architecture:** The application is built with a modular, component-based architecture using React.
 - **Responsive Design:** The application is designed to be responsive and work on different screen sizes.
 
+## Design System
+
+The UI is crafted to immerse the user in a futuristic, dystopian interface typical of the Cyberpunk genre.
+
+- **Aesthetic:** High-contrast, terminal-like interface with "Netrunner" vibes.
+- **Color Palette:**
+  - **Backgrounds:** Deep Black (`#000000`) and Dark Grey (`#111111`) for high contrast.
+  - **Primary Accent:** Neon Yellow (`#FCEE0A`) used for primary actions and highlights.
+  - **Secondary Accent:** Cyan (`#00F0FF`) for data streams and neural links.
+  - **Alerts:** Neon Red (`#FF003C`) for warnings, errors, and "ICE" levels.
+- **Typography:** Monospace fonts are used extensively to mimic code editors and command-line interfaces.
+- **Visual Effects:**
+  - **Glitch Animations:** Text and borders occasionally distort to simulate digital interference.
+  - **HUD Elements:** Status bars (RAM, ICE, UPLINK) and neural activity visualizations (D3.js waves).
+  - **Scanlines:** Subtle overlays to replicate the look of CRT monitors or retinal displays.
+
 ## Tech Stack
 
 - **React:** A JavaScript library for building user interfaces.
@@ -30,7 +46,7 @@ Neon Fragments is a web application that simulates a cyberpunk-themed blog. It's
 
 ## Services
 
-- **`geminiService.ts`:** A service that generates mock blog posts.
+- **`postService.ts`:** A service that generates mock blog posts.
 
 ## Getting Started
 

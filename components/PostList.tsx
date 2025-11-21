@@ -3,7 +3,7 @@ import { BlogPost } from '../types';
 import PostCard from './PostCard';
 import CyberButton from './CyberButton';
 import { Sparkles } from 'lucide-react';
-import { generateCyberpunkPost } from '../services/geminiService';
+import { generateCyberpunkPost } from '../services/postService';
 
 interface PostListProps {
   posts: BlogPost[];
@@ -33,7 +33,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onSelectPost, onPostGenerate
           <h2 className="text-4xl font-display font-bold text-white mb-1">LATEST TRANSMISSIONS</h2>
           <p className="text-cyber-yellow font-mono text-xs">ENCRYPTED // PUBLIC KEY DETECTED</p>
         </div>
-        
+
         <div className="mt-4 md:mt-0">
           <CyberButton onClick={handleGenerate} loading={generating} variant="primary">
             <span className="flex items-center">
@@ -46,10 +46,10 @@ const PostList: React.FC<PostListProps> = ({ posts, onSelectPost, onPostGenerate
 
       <div className="grid grid-cols-1 gap-6">
         {posts.map((post) => (
-          <PostCard 
-            key={post.id} 
-            post={post} 
-            onClick={onSelectPost} 
+          <PostCard
+            key={post.id}
+            post={post}
+            onClick={onSelectPost}
           />
         ))}
       </div>

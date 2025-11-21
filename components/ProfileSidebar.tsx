@@ -43,7 +43,7 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ user }) => {
         data.shift();
         path.datum(data).attr("d", line);
       };
-      
+
       const timer = d3.interval(tick, 100);
       return () => timer.stop();
     }
@@ -74,27 +74,27 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ user }) => {
 
         <div className="space-y-4 font-mono text-xs">
           <div className="flex justify-between items-center">
-            <span className="flex items-center text-gray-400"><Cpu className="w-3 h-3 mr-2" /> RAM</span>
+            <span className="flex items-center text-gray-400 w-20"><Cpu className="w-3 h-3 mr-2" /> RAM</span>
             <div className="w-32 h-2 bg-gray-800 rounded-none overflow-hidden">
               <div className="h-full bg-cyber-yellow" style={{ width: `${user.stats.ram}%` }}></div>
             </div>
-            <span className="text-cyber-yellow">{user.stats.ram}%</span>
-          </div>
-          
-          <div className="flex justify-between items-center">
-            <span className="flex items-center text-gray-400"><Shield className="w-3 h-3 mr-2" /> ICE</span>
-            <div className="w-32 h-2 bg-gray-800 rounded-none overflow-hidden">
-              <div className="h-full bg-cyber-red" style={{ width: `${user.stats.cpu}%` }}></div>
-            </div>
-            <span className="text-cyber-red">{user.stats.cpu}%</span>
+            <span className="text-cyber-yellow w-12 text-right">{user.stats.ram}%</span>
           </div>
 
           <div className="flex justify-between items-center">
-            <span className="flex items-center text-gray-400"><Wifi className="w-3 h-3 mr-2" /> UPLINK</span>
+            <span className="flex items-center text-gray-400 w-20"><Shield className="w-3 h-3 mr-2" /> ICE</span>
+            <div className="w-32 h-2 bg-gray-800 rounded-none overflow-hidden">
+              <div className="h-full bg-cyber-red" style={{ width: `${user.stats.cpu}%` }}></div>
+            </div>
+            <span className="text-cyber-red w-12 text-right">{user.stats.cpu}%</span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span className="flex items-center text-gray-400 w-20"><Wifi className="w-3 h-3 mr-2" /> UPLINK</span>
              <div className="w-32 h-2 bg-gray-800 rounded-none overflow-hidden">
               <div className="h-full bg-cyber-cyan" style={{ width: `${user.stats.network}%` }}></div>
             </div>
-            <span className="text-cyber-cyan">{user.stats.network}MS</span>
+            <span className="text-cyber-cyan w-12 text-right">{user.stats.network}MS</span>
           </div>
         </div>
 
@@ -108,7 +108,7 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ user }) => {
              <button className="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-2 text-xs font-bold border border-gray-600 uppercase">Ping</button>
         </div>
       </div>
-      
+
       {/* Decorative Corner */}
       <div className="absolute top-0 right-0 p-2">
          <div className="w-2 h-2 bg-cyber-red"></div>
