@@ -15,13 +15,20 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const month = String(dateObj.getMonth() + 1).padStart(2, '0');
   const day = String(dateObj.getDate()).padStart(2, '0');
   const permalink = `/${year}/${month}/${day}/${post.slug}`;
+  const displayImage = post.image || "https://picsum.photos/1200/400";
 
   return (
     <div
       className="block group relative bg-cyber-dark border-l-4 border-cyber-gray hover:border-cyber-yellow transition-all duration-300 p-6 mb-4 overflow-hidden hover:bg-gray-900"
     >
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+         <div className="absolute inset-0 bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity duration-300 mix-blend-overlay grayscale group-hover:grayscale-0" style={{ backgroundImage: `url('${displayImage}')` }}></div>
+         <div className="absolute inset-0 bg-gradient-to-r from-cyber-dark via-cyber-dark/90 to-cyber-dark/80"></div>
+      </div>
+
       {/* Background hover effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-cyber-yellow/0 to-cyber-yellow/0 group-hover:from-cyber-yellow/5 group-hover:to-transparent transition-all duration-500"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-cyber-yellow/0 to-cyber-yellow/0 group-hover:from-cyber-yellow/5 group-hover:to-transparent transition-all duration-500 pointer-events-none z-0"></div>
 
       <div className="relative z-10">
         <div className="flex justify-between items-start mb-2">
