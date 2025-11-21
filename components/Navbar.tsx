@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { NavItem } from '../types';
 import { NAV_ITEMS } from '../constants';
 import GlitchText from './GlitchText';
@@ -82,12 +83,12 @@ const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile
               <CyberMenuIcon className="w-8 h-8" isOpen={isProfileOpen} />
             </button>
 
-            <div className="flex-shrink-0 cursor-pointer" onClick={() => onNavigate(NavItem.HOME)}>
+            <Link to="/" className="flex-shrink-0 cursor-pointer">
               <h1 className="text-3xl font-display font-bold italic tracking-tighter text-cyber-yellow">
                 <span className="text-cyber-cyan mr-1">NC</span>
                 NET<span className="text-white">_</span>LINK
               </h1>
-            </div>
+            </Link>
           </div>
 
           <div className="hidden md:block">
@@ -96,9 +97,9 @@ const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile
                 const Icon = item.icon;
                 const isActive = activeItem === item.id;
                 return (
-                  <button
+                  <Link
                     key={item.id}
-                    onClick={() => onNavigate(item.id)}
+                    to={item.path}
                     className={`
                       group flex items-center px-3 py-2 text-sm font-medium font-mono transition-colors duration-200
                       ${isActive ? 'text-cyber-yellow bg-cyber-gray/30 border-b-2 border-cyber-yellow' : 'text-gray-400 hover:text-cyber-cyan'}
@@ -106,7 +107,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile
                   >
                     <Icon className={`w-4 h-4 mr-2 ${isActive ? 'animate-pulse' : 'group-hover:text-cyber-red'}`} />
                     <GlitchText text={item.label} />
-                  </button>
+                  </Link>
                 );
               })}
             </div>
