@@ -9,6 +9,7 @@ interface NavbarProps {
   onNavigate: (item: NavItem) => void;
   onToggleProfile?: () => void;
   isProfileOpen?: boolean;
+  desktopSidebar?: React.ReactNode;
 }
 
 const CyberMenuIcon = ({ className, isOpen }: { className?: string, isOpen?: boolean }) => (
@@ -68,10 +69,10 @@ const CyberMenuIcon = ({ className, isOpen }: { className?: string, isOpen?: boo
   </svg>
 );
 
-const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile, isProfileOpen }) => {
+const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile, isProfileOpen, desktopSidebar }) => {
   return (
-    <nav className="sticky top-0 z-50 w-full bg-cyber-black/90 backdrop-blur-sm border-b border-cyber-gray/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="fixed top-0 z-50 w-full bg-cyber-black/90 backdrop-blur-sm border-b border-cyber-gray/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             {/* Mobile Profile Toggle */}
@@ -121,6 +122,17 @@ const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile
       </div>
       {/* Decorative Scanline under nav */}
       <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-cyber-cyan to-transparent opacity-50"></div>
+
+      {/* Desktop Sidebar - Fixed relative to container */}
+      {desktopSidebar && (
+        <div className="hidden lg:block absolute top-16 left-0 w-full h-0 pointer-events-none">
+           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full relative">
+              <div className="absolute top-0 left-4 sm:left-6 lg:left-8 w-80 h-[calc(100vh-4rem)] overflow-y-auto pt-6 pb-6 pointer-events-auto no-scrollbar">
+                 {desktopSidebar}
+              </div>
+           </div>
+        </div>
+      )}
     </nav>
   );
 };export default Navbar;

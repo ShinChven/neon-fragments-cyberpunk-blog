@@ -45,6 +45,44 @@ const Layout: React.FC = () => {
     }
   };
 
+  const sidebarContent = (
+    <>
+      <ProfileSidebar
+        user={MOCK_USER}
+        activeItem={activeNav}
+        onNavigate={handleNav}
+      />
+
+      {/* Decorative Sidebar Elements */}
+      <div className="mt-6 hidden lg:block">
+        <div className="border border-gray-800 p-4 bg-black/40">
+          <h4 className="text-cyber-red font-mono text-xs font-bold mb-2">SYSTEM STATUS</h4>
+          <div className="space-y-2">
+            <div className="flex justify-between text-[10px] font-mono text-gray-500">
+              <span>FIREWALL</span>
+              <span className="text-green-500">ACTIVE</span>
+            </div>
+            <div className="flex justify-between text-[10px] font-mono text-gray-500">
+              <span>TRACE_ROUTE</span>
+              <span className="text-red-500">BLOCKED</span>
+            </div>
+            <div className="flex justify-between text-[10px] font-mono text-gray-500">
+              <span>DATA_FRAGMENTS</span>
+              <span className="text-cyber-cyan">{stats.postCount}</span>
+            </div>
+            <div className="flex justify-between text-[10px] font-mono text-gray-500">
+              <span>INDEX_NODES</span>
+              <span className="text-cyber-yellow">{stats.tagCount}</span>
+            </div>
+            <div className="w-full bg-gray-900 h-1 mt-2">
+              <div className="bg-cyber-yellow h-full w-2/3 animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+
   return (
     <div className="min-h-screen flex flex-col font-sans text-gray-100 selection:bg-cyber-yellow selection:text-black">
       <Navbar
@@ -52,14 +90,15 @@ const Layout: React.FC = () => {
         onNavigate={handleNav}
         onToggleProfile={() => setIsProfileOpen(!isProfileOpen)}
         isProfileOpen={isProfileOpen}
+        desktopSidebar={sidebarContent}
       />
 
-      <main className="flex-grow container mx-auto max-w-7xl w-full md:px-4 py-2 md:py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
+      <main className="flex-grow container mx-auto max-w-7xl w-full px-0 sm:px-6 lg:px-8 py-2 md:py-6 mt-16">
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
 
-          {/* Sidebar - Sticky on Desktop, Drawer on Mobile */}
+          {/* Sidebar - Drawer on Mobile */}
           <aside className={`
-            fixed inset-0 z-40 bg-black pt-24 px-6 pb-6 overflow-y-auto transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:bg-transparent lg:p-0 lg:w-80 lg:block lg:h-fit lg:flex-shrink-0
+            fixed inset-0 z-40 bg-black pt-24 px-6 pb-6 overflow-y-auto transition-transform duration-300 ease-in-out lg:hidden
             ${isProfileOpen ? 'translate-x-0' : '-translate-x-full'}
           `}>
              <ProfileSidebar
@@ -67,35 +106,12 @@ const Layout: React.FC = () => {
                 activeItem={activeNav}
                 onNavigate={handleNav}
              />
-
-             {/* Decorative Sidebar Elements */}
-             <div className="mt-6 hidden lg:block">
-                <div className="border border-gray-800 p-4 bg-black/40">
-                   <h4 className="text-cyber-red font-mono text-xs font-bold mb-2">SYSTEM STATUS</h4>
-                   <div className="space-y-2">
-                      <div className="flex justify-between text-[10px] font-mono text-gray-500">
-                         <span>FIREWALL</span>
-                         <span className="text-green-500">ACTIVE</span>
-                      </div>
-                      <div className="flex justify-between text-[10px] font-mono text-gray-500">
-                         <span>TRACE_ROUTE</span>
-                         <span className="text-red-500">BLOCKED</span>
-                      </div>
-                      <div className="flex justify-between text-[10px] font-mono text-gray-500">
-                         <span>DATA_FRAGMENTS</span>
-                         <span className="text-cyber-cyan">{stats.postCount}</span>
-                      </div>
-                      <div className="flex justify-between text-[10px] font-mono text-gray-500">
-                         <span>INDEX_NODES</span>
-                         <span className="text-cyber-yellow">{stats.tagCount}</span>
-                      </div>
-                      <div className="w-full bg-gray-900 h-1 mt-2">
-                         <div className="bg-cyber-yellow h-full w-2/3 animate-pulse"></div>
-                      </div>
-                   </div>
-                </div>
-             </div>
           </aside>
+
+          {/* Placeholder for Desktop Sidebar */}
+          <div className="hidden lg:block w-80 flex-shrink-0"></div>
+
+          {/* Overlay for mobile when open */}
 
           {/* Overlay for mobile when open */}
           {isProfileOpen && (

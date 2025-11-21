@@ -105,8 +105,8 @@ const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-8">
-      <div className="flex flex-col md:flex-row justify-between items-start mb-8 border-b-2 border-gray-800 pb-4">
+    <div className="max-w-5xl mx-auto px-0 sm:px-6 lg:px-8 py-2 md:py-8">
+      <div className="flex flex-col md:flex-row justify-between items-start mb-8 border-b-2 border-gray-800 pb-4 px-4 sm:px-0">
         <div>
           <h2 className="text-4xl font-display font-bold text-white mb-1">LATEST TRANSMISSIONS</h2>
           <p className="text-cyber-yellow font-mono text-xs">ENCRYPTED // PUBLIC KEY DETECTED</p>

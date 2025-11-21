@@ -54,7 +54,7 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ user, activeItem, onNav
   }, []);
 
   return (
-    <div className="bg-cyber-black border border-cyber-gray/50 p-6 clip-corner-tr relative overflow-hidden h-full flex flex-col">
+    <div className="bg-cyber-black border border-cyber-gray/50 p-6 clip-corner-tr relative overflow-hidden flex flex-col">
       {/* Background grid effect */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(20,20,20,0.8)_1px,transparent_1px),linear-gradient(90deg,rgba(20,20,20,0.8)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none z-0 opacity-50"></div>
 
