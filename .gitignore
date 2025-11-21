@@ -6,6 +6,7 @@ lib/
 _posts/
 services/posts.json
 posts.json
+public/images/
 
 test/config.json
 package-lock.json

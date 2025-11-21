@@ -1,75 +1,97 @@
 # Neon Fragments: A Cyberpunk Blog
 
-Neon Fragments is a web application that simulates a cyberpunk-themed blog. It's built with React, TypeScript, and Vite, and it uses the Gemini API to generate blog post content. The user interface is designed to be immersive and visually appealing, with a futuristic, cyberpunk aesthetic.
+Neon Fragments is a **Headless SSR Blog** built with a futuristic, cyberpunk aesthetic. It leverages a modern "Polymorphic" architecture where the same code runs on the server (Hono) and the client (React), providing fast initial loads via Server-Side Rendering (SSR) and seamless navigation via Client-Side Hydration.
 
 **[Live Preview](https://ShinChven.github.io/neon-fragments-cyberpunk-blog/)**
 
-## Features
+## 🏗 Architecture
 
-- **Cyberpunk UI:** The application features a dark, neon-lit user interface with a cyberpunk aesthetic.
-- **Post Generation:** New blog posts are generated using a mock service (previously Gemini API).
-- **Component-Based Architecture:** The application is built with a modular, component-based architecture using React.
-- **Responsive Design:** The application is designed to be responsive and work on different screen sizes.
+This project separates **Program** (Code) from **Content** (Data) using a build-time compilation step.
 
-## Design System
+*   **Server Framework**: [Hono](https://hono.dev/) - Handles SSR and API routes. Runs on Node.js (Dev) and Cloudflare Workers (Prod).
+*   **Frontend**: React 19 + React Router v7.
+*   **Build Tool**: Vite (with `@hono/vite-dev-server` for SSR).
+*   **Content Engine**: Markdown files in `_posts/` are compiled to JSON at build time.
 
-The UI is crafted to immerse the user in a futuristic, dystopian interface typical of the Cyberpunk genre.
+### How it Works
+1.  **Content**: You write posts in Markdown (`_posts/*.md`) with YAML frontmatter.
+2.  **Build**: `npm run build:content` compiles Markdown -> HTML -> `services/posts.json`.
+3.  **SSR**: On the first request, Hono reads `posts.json`, renders the React app to an HTML string, and injects it into `index.html`.
+4.  **Hydration**: The browser loads the HTML and the client-side React app "hydrates" the static HTML, turning it into a fully interactive SPA.
+5.  **Routing**: `react-router` handles navigation. Initial load is server-rendered; subsequent clicks are client-side transitions.
 
-- **Aesthetic:** High-contrast, terminal-like interface with "Netrunner" vibes.
-- **Color Palette:**
-  - **Backgrounds:** Deep Black (`#000000`) and Dark Grey (`#111111`) for high contrast.
-  - **Primary Accent:** Neon Yellow (`#FCEE0A`) used for primary actions and highlights.
-  - **Secondary Accent:** Cyan (`#00F0FF`) for data streams and neural links.
-  - **Alerts:** Neon Red (`#FF003C`) for warnings, errors, and "ICE" levels.
-- **Typography:** Monospace fonts are used extensively to mimic code editors and command-line interfaces.
-- **Visual Effects:**
-  - **Glitch Animations:** Text and borders occasionally distort to simulate digital interference.
-  - **HUD Elements:** Status bars (RAM, ICE, UPLINK) and neural activity visualizations (D3.js waves).
-  - **Scanlines:** Subtle overlays to replicate the look of CRT monitors or retinal displays.
+## 🎨 Design System
 
-## Tech Stack
+The UI is crafted to immerse the user in a futuristic, dystopian interface.
 
-- **React:** A JavaScript library for building user interfaces.
-- **TypeScript:** A typed superset of JavaScript that compiles to plain JavaScript.
-- **Vite:** A fast build tool and development server for modern web projects.
-- **D3:** Used for data visualization in the profile sidebar.
-- **Lucide React:** A library of simply designed icons.
+- **Aesthetic**: High-contrast, terminal-like interface with "Netrunner" vibes.
+- **Visual Effects**:
+  - **Glitch Animations**: CSS-based text distortion.
+  - **Scanlines**: CRT monitor overlays.
+  - **HUD Elements**: Status bars and neural activity visualizations.
 
-## Components
+## 🛠 Tech Stack
 
-- **`App.tsx`:** The main application component that manages the application's state and renders the different views.
-- **`CyberButton.tsx`:** A reusable button component with a cyberpunk-themed design.
-- **`GlitchText.tsx`:** A component that applies a glitch effect to text.
-- **`Navbar.tsx`:** The navigation bar component.
-- **`PostCard.tsx`:** A component that displays a summary of a blog post.
-- **`PostDetail.tsx`:** A component that displays the full content of a blog post.
-- **`PostList.tsx`:** A component that displays a list of blog posts.
-- **`ProfileSidebar.tsx`:** A sidebar component that displays user profile information.
+- **Core**: React 19, TypeScript, Vite
+- **Server**: Hono
+- **Routing**: React Router v7
+- **Content**: Gray-Matter (Frontmatter), Marked (Markdown parsing)
+- **Styling**: TailwindCSS, Lucide React Icons, D3.js
 
-## Services
+## 🚀 Getting Started
 
-- **`postService.ts`:** A service that generates mock blog posts.
+### 1. Installation
+```bash
+git clone https://github.com/ShinChven/neon-fragments-cyberpunk-blog.git
+npm install
+```
 
-## Getting Started
+### 2. Content Creation
+Create a new markdown file in `_posts/`:
+```yaml
+---
+title: "My New Post"
+date: "2077-11-21"
+description: "A short description for the feed."
+tags: ["cyberpunk", "tech"]
+---
 
-To run the application locally, follow these steps:
+Your content goes here...
+```
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/ShinChven/neon-fragments-cyberpunk-blog.git
-   ```
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-3. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-This will start the development server and open the application in your browser at `http://localhost:5173`.
+Compile the content:
+```bash
+npm run build:content
+```
 
-## Available Scripts
+### 3. Development
+Start the Hono + Vite dev server:
+```bash
+npm run dev
+```
+Open `http://localhost:3000`.
 
-- **`npm run dev`:** Runs the application in development mode.
-- **`npm run build`:** Builds the application for production.
-- **`npm run preview`:** Serves the production build locally for preview.
+### 4. Production Build
+Build the client and server bundles:
+```bash
+npm run build
+```
+
+## 📂 Project Structure
+
+- **`_posts/`**: Source markdown files.
+- **`server/`**: Hono server entry point (`index.ts`) and API routes (`app.ts`).
+- **`scripts/`**: Build scripts (e.g., `build-content.ts`).
+- **`components/`**: React UI components.
+- **`contexts/`**: React Contexts (e.g., `DataContext` for SSR hydration).
+- **`services/`**: Data access layer (generated `posts.json`).
+- **`public/`**: Static assets (`robots.txt`, images).
+
+## ☁️ Deployment
+
+The project is configured for **Cloudflare Workers**.
+1.  Run `npm run build`.
+2.  Deploy using Wrangler (configuration required in `wrangler.toml`).
+
+---
+*System Status: ONLINE // Connection Secure*
