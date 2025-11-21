@@ -1,0 +1,60 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Create empty posts.json for build
+      # We need posts.json to exist for the build to succeed (if it's imported/read)
+      # But we want it empty for the final artifact.
+      # The code now handles empty/missing file gracefully in try-catch,
+      # but we should ensure the directory exists.
+      run: |
+        mkdir -p services
+        echo "[]" > services/posts.json
+
+    - name: Build Client
+      run: npm run build:client
+
+    - name: Build Server
+      run: npm run build:server
+
+    - name: Prepare Release Artifact
+      run: |
+        mkdir release
+        cp package.json release/
+        cp package-lock.json release/
+        cp Dockerfile release/
+        cp -r dist release/
+        mkdir -p release/services
+        echo "[]" > release/services/posts.json
+        mkdir -p release/images
+
+    - name: Zip Release
+      run: |
+        cd release
+        zip -r ../release.zip .
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-package
+        path: release.zip

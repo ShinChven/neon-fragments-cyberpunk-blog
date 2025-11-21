@@ -1,7 +1,19 @@
 import { Hono } from 'hono';
-import posts from '../services/posts.json';
+import fs from 'node:fs';
+import path from 'node:path';
 import { generateOgImage } from './og-image';
 import { BASE_URL } from '../constants';
+
+const postsPath = path.resolve(process.cwd(), 'services', 'posts.json');
+let posts: any[] = [];
+
+try {
+  const data = fs.readFileSync(postsPath, 'utf-8');
+  posts = JSON.parse(data);
+} catch (error) {
+  console.warn('Failed to load posts from services/posts.json', error);
+  posts = [];
+}
 
 const app = new Hono();
 

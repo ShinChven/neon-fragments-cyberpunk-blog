@@ -1,21 +1,41 @@
+/// <reference types="vite/client" />
 import { Hono } from 'hono';
+import { serve } from '@hono/node-server';
+import { serveStatic } from '@hono/node-server/serve-static';
+import fs from 'node:fs';
+import path from 'node:path';
 import { render } from '../entry-server';
 import app from './app';
 // @ts-ignore
-import template from '../index.html?raw';
-import posts from '../services/posts.json';
+// import template from '../index.html?raw';
+// import posts from '../services/posts.json';
+
+const postsPath = path.resolve(process.cwd(), 'services', 'posts.json');
+let posts: any[] = [];
+
+try {
+  const data = fs.readFileSync(postsPath, 'utf-8');
+  posts = JSON.parse(data);
+} catch (error) {
+  console.warn('Failed to load posts from services/posts.json', error);
+  posts = [];
+}
 
 const server = new Hono();
+
+if (import.meta.env.PROD) {
+  server.use('/*', serveStatic({ root: './dist/client' }));
+}
 
 server.route('/', app);
 
 server.get('*', (c) => {
-  const path = c.req.path;
+  const pathName = c.req.path;
   let initialPosts: typeof posts = [];
 
   // Simple logic to determine initial posts based on route
   // If it's a post detail page, try to find the post and include it
-  const postMatch = path.match(/^\/(\d{4})\/(\d{2})\/(\d{2})\/([^/]+)$/);
+  const postMatch = pathName.match(/^\/(\d{4})\/(\d{2})\/(\d{2})\/([^/]+)$/);
   if (postMatch) {
     const slug = postMatch[4];
     const index = posts.findIndex((p) => p.slug === slug);
@@ -36,8 +56,25 @@ server.get('*', (c) => {
   // For home page or other pages, we keep initialPosts empty to avoid large payload
   // The client will fetch the list
 
-  const { html: appHtml, helmetContext } = render(path, initialPosts);
+  const { html: appHtml, helmetContext } = render(pathName, initialPosts);
   const { helmet } = helmetContext as any;
+
+  let template = '';
+  if (import.meta.env.PROD) {
+    try {
+      template = fs.readFileSync(path.resolve('dist/client/index.html.template'), 'utf-8');
+    } catch (e) {
+      console.error("Could not read dist/client/index.html.template");
+      return c.text("Internal Server Error: Missing client build", 500);
+    }
+  } else {
+    try {
+      template = fs.readFileSync(path.resolve('index.html'), 'utf-8');
+    } catch (e) {
+      console.error("Could not read index.html");
+      return c.text("Internal Server Error: Missing index.html", 500);
+    }
+  }
 
   let html = template
     .replace('<!--app-html-->', appHtml)
@@ -69,5 +106,14 @@ server.get('*', (c) => {
 
   return c.html(html);
 });
+
+if (import.meta.env.PROD) {
+  const port = 3000;
+  console.log(`Server is running on port ${port}`);
+  serve({
+    fetch: server.fetch,
+    port
+  });
+}
 
 export default server;
