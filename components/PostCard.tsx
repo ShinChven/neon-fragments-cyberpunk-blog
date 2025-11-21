@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { BlogPost } from '../types';
 import { Clock, Hash, ChevronRight, AlertTriangle } from 'lucide-react';
+import CyberDate from './CyberDate';
 
 interface PostCardProps {
   post: BlogPost;
@@ -27,7 +28,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <div className="flex justify-between items-start mb-2">
           <div className="flex items-center space-x-2 text-xs font-mono text-gray-500">
             <Clock className="w-3 h-3" />
-            <span>{post.date}</span>
+            <CyberDate date={post.date} />
             <span className="text-cyber-cyan"> // {post.author}</span>
           </div>
           {post.isGlitch && <AlertTriangle className="w-4 h-4 text-cyber-red animate-pulse" />}

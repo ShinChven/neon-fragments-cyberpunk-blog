@@ -6,6 +6,7 @@ import { ArrowLeft, Share2, ThumbsUp, MessageSquare, AlertOctagon } from 'lucide
 import CyberButton from './CyberButton';
 import GlitchText from './GlitchText';
 import NotFound from './NotFound';
+import CyberDate from './CyberDate';
 
 const PostDetail: React.FC = () => {
   const { year, month, day, slug } = useParams<{ year: string; month: string; day: string; slug: string }>();
@@ -72,7 +73,7 @@ const PostDetail: React.FC = () => {
         {/* Metadata Bar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-800 pb-4 mb-8 font-mono text-sm text-gray-400 gap-2 md:gap-0">
           <div className="flex items-center space-x-4">
-             <span className="text-cyber-yellow">{post.date}</span>
+             <CyberDate date={post.date} className="text-base" />
              <span className="flex items-center"><span className="w-2 h-2 bg-cyber-red rounded-full mr-2 animate-pulse"></span> {post.readTime}</span>
           </div>
           <div className="flex items-center space-x-2">
