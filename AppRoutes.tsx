@@ -5,6 +5,7 @@ import PostList from './components/PostList';
 import PostDetail from './components/PostDetail';
 import NotFound from './components/NotFound';
 import GlitchText from './components/GlitchText';
+import NetPage from './components/NetPage';
 
 const GenericPage: React.FC<{ title: string }> = ({ title }) => (
   <div className="p-8 text-center">
@@ -22,7 +23,7 @@ export function AppRoutes() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<PostList />} />
-        <Route path="net" element={<GenericPage title="THE NET" />} />
+        <Route path="net" element={<NetPage />} />
         <Route path="data" element={<GenericPage title="DATA ARCHIVES" />} />
         <Route path="gear" element={<GenericPage title="CYBERWARE" />} />
         <Route path=":year/:month/:day/:slug" element={<PostDetail />} />

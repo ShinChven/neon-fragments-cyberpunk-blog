@@ -17,6 +17,7 @@ const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get('page')) || 1;
   const searchQuery = searchParams.get('search') || '';
+  const tagQuery = searchParams.get('tags') || '';
   const [totalPages, setTotalPages] = useState(1);
   const [inputValue, setInputValue] = useState(searchQuery);
 
@@ -34,6 +35,9 @@ const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
         if (searchQuery) {
           params.set('search', searchQuery);
         }
+        if (tagQuery) {
+          params.set('tags', tagQuery);
+        }
 
         const response = await fetch(`/api/posts?${params.toString()}`);
         if (response.ok) {
@@ -49,7 +53,7 @@ const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
     };
 
     fetchPosts();
-  }, [page, searchQuery]);
+  }, [page, searchQuery, tagQuery]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -72,7 +76,20 @@ const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
 
   const handleClearSearch = () => {
     setInputValue('');
-    setSearchParams({});
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      newParams.delete('search');
+      return newParams;
+    });
+  };
+
+  const handleClearTag = () => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      newParams.delete('tags');
+      newParams.set('page', '1');
+      return newParams;
+    });
   };
 
   const handlePageChange = (newPage: number) => {
@@ -92,6 +109,14 @@ const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
         <div>
           <h2 className="text-4xl font-display font-bold text-white mb-1">LATEST TRANSMISSIONS</h2>
           <p className="text-cyber-yellow font-mono text-xs">ENCRYPTED // PUBLIC KEY DETECTED</p>
+          {tagQuery && (
+            <div className="mt-2 flex items-center space-x-2 bg-cyber-yellow/10 px-2 py-1 rounded border border-cyber-yellow/30 inline-flex">
+              <span className="text-cyber-yellow font-mono text-xs">FILTER: TAG [{tagQuery}]</span>
+              <button onClick={handleClearTag} className="text-cyber-yellow hover:text-white transition-colors">
+                <X className="w-3 h-3" />
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="mt-4 md:mt-0 w-full md:w-auto">
