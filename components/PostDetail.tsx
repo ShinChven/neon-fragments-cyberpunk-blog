@@ -282,17 +282,26 @@ const PostDetail: React.FC = () => {
          <div className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-overlay" style={{ backgroundImage: `url('${displayImage}')` }}></div>
          <div className="absolute inset-0 bg-gradient-to-t from-cyber-dark to-transparent"></div>
 
-         <div className="relative z-10 w-full max-w-4xl mx-auto px-4 md:px-8 pb-8">
+         <div className="relative z-10 w-full max-w-4xl mx-auto px-4 md:px-8 pb-4">
            <button onClick={() => navigate('/')} className="flex items-center text-cyber-cyan hover:text-white transition-colors font-mono text-sm mb-2 md:mb-4">
              <ArrowLeft className="w-4 h-4 mr-2" /> RETURN_TO_GRID
            </button>
            <h1 className="text-2xl md:text-5xl font-display font-bold text-white uppercase tracking-tighter drop-shadow-[0_0_10px_rgba(252,238,10,0.5)]">
              <GlitchText text={post.title} />
            </h1>
+
+           {/* Tags */}
+           <div className="flex flex-wrap gap-2 mt-4">
+             {post.tags.map(tag => (
+               <Link key={tag} to={`/?tag=${encodeURIComponent(tag)}`} className="text-xs font-bold font-mono bg-cyber-cyan/10 text-cyber-cyan px-3 py-1 border border-cyber-cyan/30 uppercase hover:bg-cyber-cyan/20 transition-colors">
+                 #{tag}
+               </Link>
+             ))}
+           </div>
          </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 md:px-8 py-4 md:py-8">
+      <div className="max-w-4xl mx-auto px-4 md:px-8 pt-2 pb-4 md:pb-8">
         {/* Metadata Bar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-800 pb-4 mb-8 font-mono text-sm text-gray-400 gap-2 md:gap-0">
           <div className="flex items-center space-x-4">
@@ -323,14 +332,7 @@ const PostDetail: React.FC = () => {
           )}
         </article>
 
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {post.tags.map(tag => (
-            <Link key={tag} to={`/?tag=${encodeURIComponent(tag)}`} className="text-xs font-bold font-mono bg-cyber-cyan/10 text-cyber-cyan px-3 py-1 border border-cyber-cyan/30 uppercase hover:bg-cyber-cyan/20 transition-colors">
-              #{tag}
-            </Link>
-          ))}
-        </div>
+
 
         {/* Action Bar */}
         <div className="flex flex-col md:flex-row items-center justify-between bg-gray-900 p-6 clip-corner border-l-4 border-cyber-cyan">
