@@ -50,7 +50,7 @@ const App: React.FC = () => {
         isProfileOpen={isProfileOpen}
       />
 
-      <main className="flex-grow container mx-auto max-w-7xl w-full md:px-4 py-6">
+      <main className="flex-grow container mx-auto max-w-7xl w-full md:px-4 py-2 md:py-6">
         <div className="flex flex-col lg:flex-row gap-6">
 
           {/* Sidebar - Sticky on Desktop, Drawer on Mobile */}
