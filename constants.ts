@@ -8,6 +8,8 @@ export const NAV_ITEMS = [
   { id: NavItem.GEAR, label: 'GEAR', icon: Settings, path: '/gear' },
 ];
 
+export const BASE_URL = 'https://atlassc.net';
+
 export const DEFAULT_AUTHOR: UserProfile = {
   name: "Z. SHINCHVEN",
   handle: "@ShinChven",

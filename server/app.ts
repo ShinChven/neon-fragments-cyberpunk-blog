@@ -1,8 +1,112 @@
 import { Hono } from 'hono';
 import posts from '../services/posts.json';
 import { generateOgImage } from './og-image';
+import { BASE_URL } from '../constants';
 
 const app = new Hono();
+
+const SITE_TITLE = 'Neon Fragments: Cyberpunk Blog';
+const SITE_DESCRIPTION = 'A futuristic, immersive Cyberpunk 2077-inspired blog interface.';
+
+function escapeXml(unsafe: string): string {
+  return unsafe.replace(/[<>&'"]/g, (c) => {
+    switch (c) {
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '&': return '&amp;';
+      case '\'': return '&apos;';
+      case '"': return '&quot;';
+      default: return c;
+    }
+  });
+}
+
+function getPostDescription(post: typeof posts[0]): string {
+  if (post.description) return post.description;
+  if (post.content) {
+    const text = post.content.replace(/<[^>]*>?/gm, '');
+    return text.substring(0, 200) + '...';
+  }
+  return '';
+}
+
+function getPostUrl(post: typeof posts[0]): string {
+  const d = new Date(post.date);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${BASE_URL}/${y}/${m}/${day}/${post.slug}`;
+}
+
+app.get('/rss.xml', (c) => {
+  const feedPosts = posts.slice(0, 50);
+  const lastBuildDate = feedPosts.length > 0 ? new Date(feedPosts[0].date).toUTCString() : new Date().toUTCString();
+
+  const items = feedPosts.map(post => {
+    const link = getPostUrl(post);
+    return `
+    <item>
+      <title>${escapeXml(post.title)}</title>
+      <link>${link}</link>
+      <description>${escapeXml(getPostDescription(post))}</description>
+      <pubDate>${new Date(post.date).toUTCString()}</pubDate>
+      <guid>${link}</guid>
+    </item>`;
+  }).join('');
+
+  const rss = `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>${escapeXml(SITE_TITLE)}</title>
+    <link>${BASE_URL}</link>
+    <description>${escapeXml(SITE_DESCRIPTION)}</description>
+    <lastBuildDate>${lastBuildDate}</lastBuildDate>
+    <language>en-us</language>
+    ${items}
+  </channel>
+</rss>`;
+
+  return c.body(rss, 200, {
+    'Content-Type': 'application/xml',
+  });
+});
+
+app.get('/atom.xml', (c) => {
+  const feedPosts = posts.slice(0, 50);
+  const updated = feedPosts.length > 0 ? new Date(feedPosts[0].date).toISOString() : new Date().toISOString();
+
+  const entries = feedPosts.map(post => {
+    const link = getPostUrl(post);
+    return `
+    <entry>
+      <title>${escapeXml(post.title)}</title>
+      <link href="${link}"/>
+      <id>${link}</id>
+      <updated>${new Date(post.date).toISOString()}</updated>
+      <summary>${escapeXml(getPostDescription(post))}</summary>
+      <author>
+        <name>${escapeXml(post.author.name)}</name>
+      </author>
+    </entry>`;
+  }).join('');
+
+  const atom = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>${escapeXml(SITE_TITLE)}</title>
+  <link href="${BASE_URL}/atom.xml" rel="self"/>
+  <link href="${BASE_URL}"/>
+  <updated>${updated}</updated>
+  <id>${BASE_URL}/</id>
+  <author>
+    <name>Z. SHINCHVEN</name>
+  </author>
+  ${entries}
+</feed>`;
+
+  return c.body(atom, 200, {
+    'Content-Type': 'application/xml',
+  });
+});
 
 app.get('/card/:year/:month/:day/:slug', async (c) => {
   const { year, month, day, slug: rawSlug } = c.req.param();

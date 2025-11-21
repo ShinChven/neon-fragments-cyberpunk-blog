@@ -10,6 +10,7 @@ import GlitchText from './GlitchText';
 import NotFound from './NotFound';
 import CyberDate from './CyberDate';
 import ShareModal from './ShareModal';
+import { BASE_URL } from '../constants';
 
 
 
@@ -222,8 +223,7 @@ const PostDetail: React.FC = () => {
     return <NotFound />;
   }
 
-  const baseUrl = 'https://atlassc.net';
-  const currentUrl = `${baseUrl}${location.pathname}`;
+  const currentUrl = `${BASE_URL}${location.pathname}`;
   const defaultImage = "https://picsum.photos/1200/400";
   const displayImage = post.image || defaultImage;
 
@@ -251,7 +251,7 @@ const PostDetail: React.FC = () => {
   const yearStr = dateObj.getFullYear();
   const monthStr = String(dateObj.getMonth() + 1).padStart(2, '0');
   const dayStr = String(dateObj.getDate()).padStart(2, '0');
-  const ogImage = `${baseUrl}/card/${yearStr}/${monthStr}/${dayStr}/${post.slug}.png`;
+  const ogImage = `${BASE_URL}/card/${yearStr}/${monthStr}/${dayStr}/${post.slug}.png`;
 
   const plainTextContent = post.content.replace(/<[^>]+>/g, '');
   const description = post.description || plainTextContent.substring(0, 150) + '...';
@@ -353,8 +353,11 @@ const PostDetail: React.FC = () => {
            </div>
         </div>
 
-        {/* Navigation Buttons */}
-        <div className="flex flex-row justify-between mt-8 gap-4">
+      </div>
+
+      {/* Navigation Buttons */}
+      <div className="max-w-4xl mx-auto px-4 md:px-8 pb-8">
+          <div className="flex flex-row justify-between gap-4">
            {olderPost ? (
              <Link to={getPostUrl(olderPost)} className="flex-1 group">
                <div className="border border-gray-800 bg-gray-900/50 p-4 hover:border-cyber-cyan transition-all h-full flex flex-col items-start relative overflow-hidden clip-corner">
@@ -396,7 +399,7 @@ const PostDetail: React.FC = () => {
                </div>
              </div>
            )}
-        </div>
+          </div>
       </div>
 
       {post && (
