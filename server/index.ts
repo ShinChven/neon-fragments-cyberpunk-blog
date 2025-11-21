@@ -10,10 +10,26 @@ const server = new Hono();
 server.route('/', app);
 
 server.get('*', (c) => {
-  const appHtml = render(c.req.path, posts);
+  const path = c.req.path;
+  let initialPosts: typeof posts = [];
+
+  // Simple logic to determine initial posts based on route
+  // If it's a post detail page, try to find the post and include it
+  const postMatch = path.match(/^\/(\d{4})\/(\d{2})\/(\d{2})\/([^/]+)$/);
+  if (postMatch) {
+    const slug = postMatch[4];
+    const post = posts.find((p) => p.slug === slug);
+    if (post) {
+      initialPosts = [post];
+    }
+  }
+  // For home page or other pages, we keep initialPosts empty to avoid large payload
+  // The client will fetch the list
+
+  const appHtml = render(path, initialPosts);
   let html = template
     .replace('<!--app-html-->', appHtml)
-    .replace('<!--initial-data-->', `<script>window.__INITIAL_DATA__ = ${JSON.stringify(posts)}</script>`);
+    .replace('<!--initial-data-->', `<script>window.__INITIAL_DATA__ = ${JSON.stringify(initialPosts)}</script>`);
 
   // @ts-ignore
   if (import.meta.env.DEV) {

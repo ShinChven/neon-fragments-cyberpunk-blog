@@ -26,7 +26,19 @@ const PostDetail: React.FC = () => {
          setPost(found);
          setLoading(false);
        } else {
-         setLoading(false);
+         fetch(`/api/posts/${slug}`)
+           .then(res => {
+             if (res.ok) return res.json();
+             throw new Error('Post not found');
+           })
+           .then(data => {
+             setPost(data);
+             setLoading(false);
+           })
+           .catch(err => {
+             console.error(err);
+             setLoading(false);
+           });
        }
     }
   }, [slug, posts, post]);

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router';
 import { BlogPost } from '../types';
 import { useData } from '../contexts/DataContext';
 import PostCard from './PostCard';
-import { Search } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 interface PostListProps {
   posts?: BlogPost[];
@@ -10,12 +11,84 @@ interface PostListProps {
 
 const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
   const { posts: contextPosts } = useData();
-  const posts = propPosts || contextPosts || [];
-  const [searchQuery, setSearchQuery] = useState('');
+  const [posts, setPosts] = useState<BlogPost[]>(propPosts || contextPosts || []);
+  const [loading, setLoading] = useState(true);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get('page')) || 1;
+  const searchQuery = searchParams.get('search') || '';
+  const [totalPages, setTotalPages] = useState(1);
+  const [inputValue, setInputValue] = useState(searchQuery);
+
+  useEffect(() => {
+    setInputValue(searchQuery);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      try {
+        const params = new URLSearchParams();
+        params.set('page', String(page));
+        params.set('limit', '10');
+        if (searchQuery) {
+          params.set('search', searchQuery);
+        }
+
+        const response = await fetch(`/api/posts?${params.toString()}`);
+        if (response.ok) {
+          const data = await response.json();
+          setPosts(data.posts);
+          setTotalPages(data.totalPages);
+        }
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, [page, searchQuery]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setSearchParams(prev => {
+        const newParams = new URLSearchParams(prev);
+        if (inputValue) {
+          newParams.set('search', inputValue);
+        } else {
+          newParams.delete('search');
+        }
+        newParams.set('page', '1'); // Reset to page 1 on search
+        return newParams;
+      });
+    }
+  };
+
+  const handleClearSearch = () => {
+    setInputValue('');
+    setSearchParams({});
+  };
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setSearchParams(prev => {
+        const newParams = new URLSearchParams(prev);
+        newParams.set('page', String(newPage));
+        return newParams;
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 border-b-2 border-gray-800 pb-4">
+      <div className="flex flex-col md:flex-row justify-between items-start mb-8 border-b-2 border-gray-800 pb-4">
         <div>
           <h2 className="text-4xl font-display font-bold text-white mb-1">LATEST TRANSMISSIONS</h2>
           <p className="text-cyber-yellow font-mono text-xs">ENCRYPTED // PUBLIC KEY DETECTED</p>
@@ -28,29 +101,63 @@ const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
             </div>
             <input
               type="text"
-              className="block w-full md:w-72 bg-black/80 border-2 border-cyber-yellow text-cyber-yellow placeholder-cyber-yellow/40 font-mono text-sm focus:outline-none focus:border-cyber-cyan focus:text-cyber-cyan focus:placeholder-cyber-cyan/40 py-3 pl-10 pr-4 clip-corner transition-all duration-300 uppercase tracking-wider"
+              className="block w-full md:w-72 bg-black/80 border-2 border-cyber-yellow text-cyber-yellow placeholder-cyber-yellow/40 font-mono text-sm focus:outline-none focus:border-cyber-cyan focus:text-cyber-cyan focus:placeholder-cyber-cyan/40 py-3 pl-10 pr-10 clip-corner transition-all duration-300 uppercase tracking-wider"
               placeholder="SEARCH_DATABASE..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={inputValue}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
             />
+            {inputValue && (
+              <button
+                onClick={handleClearSearch}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-cyber-yellow hover:text-cyber-cyan transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-2 h-2 bg-cyber-yellow group-focus-within:bg-cyber-cyan transition-colors"></div>
             <div className="absolute bottom-0 left-0 w-2 h-2 bg-cyber-yellow group-focus-within:bg-cyber-cyan transition-colors"></div>
           </div>
         </div>
       </div>
-
       <div className="grid grid-cols-1 gap-6">
-        {posts.map((post) => (
-          <PostCard
-            key={post.id}
-            post={post}
-          />
-        ))}
-      </div>      {/* Load More Mock */}
-      <div className="mt-12 text-center">
-         <button className="text-gray-500 hover:text-white font-mono text-sm uppercase tracking-widest border-b border-transparent hover:border-cyber-red transition-all pb-1">
-            Load Legacy Archives
+        {loading && posts.length === 0 ? (
+          <div className="text-center text-cyber-yellow font-mono animate-pulse">
+            INITIALIZING DATA LINK...
+          </div>
+        ) : (
+          posts.map((post) => (
+            <PostCard
+              key={post.id}
+              post={post}
+            />
+          ))
+        )}
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="mt-12 flex justify-center items-center space-x-6">
+         <button
+           onClick={() => handlePageChange(page - 1)}
+           disabled={page <= 1}
+           className={`flex items-center space-x-2 font-mono text-sm uppercase tracking-widest border border-transparent px-4 py-2 transition-all ${page <= 1 ? 'text-gray-600 cursor-not-allowed' : 'text-cyber-cyan hover:border-cyber-cyan hover:bg-cyber-cyan/10'}`}
+         >
+            <ChevronLeft className="w-4 h-4" />
+            <span>PREV_SECTOR</span>
+         </button>
+
+         <div className="font-mono text-cyber-yellow text-sm">
+            PAGE <span className="text-white font-bold">{page}</span> / {totalPages}
+         </div>
+
+         <button
+           onClick={() => handlePageChange(page + 1)}
+           disabled={page >= totalPages}
+           className={`flex items-center space-x-2 font-mono text-sm uppercase tracking-widest border border-transparent px-4 py-2 transition-all ${page >= totalPages ? 'text-gray-600 cursor-not-allowed' : 'text-cyber-cyan hover:border-cyber-cyan hover:bg-cyber-cyan/10'}`}
+         >
+            <span>NEXT_SECTOR</span>
+            <ChevronRight className="w-4 h-4" />
          </button>
       </div>
     </div>
