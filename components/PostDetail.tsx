@@ -83,7 +83,7 @@ const PostDetail: React.FC = () => {
         wrapper.style.overflowX = 'auto';
         // @ts-ignore
         wrapper.style.webkitOverflowScrolling = 'touch'; // Smooth scrolling on iOS
-        
+
         if (table.parentNode) {
           table.parentNode.insertBefore(wrapper, table);
           wrapper.appendChild(table);
@@ -101,7 +101,7 @@ const PostDetail: React.FC = () => {
 
         // Create wrapper
         const wrapper = document.createElement('div');
-        wrapper.className = 'code-block-wrapper relative group mb-8 border border-cyber-gray bg-[#0a0a0a] max-w-full';
+        wrapper.className = 'code-block-wrapper relative group mb-8 border border-cyber-gray bg-[#0a0a0a] w-full overflow-hidden rounded-md';
 
         // Insert wrapper
         pre.parentNode?.insertBefore(wrapper, pre);
@@ -115,7 +115,7 @@ const PostDetail: React.FC = () => {
         pre.style.margin = '0'; // Ensure no margin
         pre.style.maxWidth = '100%'; // Ensure pre doesn't overflow wrapper
         pre.style.overflowX = 'auto'; // Ensure pre scrolls
-        
+
         // Create Toolbar
         const toolbar = document.createElement('div');
         toolbar.className = 'flex items-center justify-between px-4 py-2 border-b border-cyber-gray bg-cyber-dark/50 backdrop-blur-sm';
