@@ -86,7 +86,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeItem, onNavigate, onToggleProfile
             <Link to="/" className="flex-shrink-0 cursor-pointer">
               <h1 className="text-3xl font-display font-bold italic tracking-tighter text-cyber-yellow">
                 <span className="text-cyber-cyan mr-1">NC</span>
-                NET<span className="text-white">_</span>LINK
+                ATLASSC<span className="text-white">.</span>NET
               </h1>
             </Link>
           </div>

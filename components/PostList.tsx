@@ -17,7 +17,7 @@ const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get('page')) || 1;
   const searchQuery = searchParams.get('search') || '';
-  const tagQuery = searchParams.get('tags') || '';
+  const tagQuery = searchParams.get('tags') || searchParams.get('tag') || '';
   const [totalPages, setTotalPages] = useState(1);
   const [inputValue, setInputValue] = useState(searchQuery);
 
@@ -87,6 +87,7 @@ const PostList: React.FC<PostListProps> = ({ posts: propPosts }) => {
     setSearchParams(prev => {
       const newParams = new URLSearchParams(prev);
       newParams.delete('tags');
+      newParams.delete('tag');
       newParams.set('page', '1');
       return newParams;
     });

@@ -42,7 +42,7 @@ const TagItem: React.FC<{ tag: Tag; index: number; maxCount: number }> = ({ tag,
   const opacityClass = tag.count > 0 ? 'opacity-100' : 'opacity-80';
   return (
     <Link
-      to={`/?tags=${encodeURIComponent(tag.tag)}&page=1`}
+      to={`/?tag=${encodeURIComponent(tag.tag)}&page=1`}
       className={`
         relative group inline-flex items-center justify-center
         px-4 py-2 md:px-6 md:py-3

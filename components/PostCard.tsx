@@ -45,10 +45,10 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <div className="flex justify-between items-end">
           <div className="flex flex-wrap gap-2">
             {post.tags.map(tag => (
-              <span key={tag} className="flex items-center text-[10px] font-mono bg-gray-800 text-cyber-cyan px-2 py-1 border border-gray-700">
+              <Link key={tag} to={`/?tag=${encodeURIComponent(tag)}`} className="flex items-center text-[10px] font-mono bg-gray-800 text-cyber-cyan px-2 py-1 border border-gray-700 hover:bg-gray-700 transition-colors">
                 <Hash className="w-2 h-2 mr-1" />
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
 

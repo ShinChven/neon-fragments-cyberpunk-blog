@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router';
+import { useParams, useNavigate, Link } from 'react-router';
 import { BlogPost } from '../types';
 import { useData } from '../contexts/DataContext';
 import { ArrowLeft, Share2, ThumbsUp, MessageSquare, AlertOctagon } from 'lucide-react';
@@ -102,9 +102,9 @@ const PostDetail: React.FC = () => {
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-8">
           {post.tags.map(tag => (
-            <span key={tag} className="text-xs font-bold font-mono bg-cyber-cyan/10 text-cyber-cyan px-3 py-1 border border-cyber-cyan/30 uppercase">
+            <Link key={tag} to={`/?tag=${encodeURIComponent(tag)}`} className="text-xs font-bold font-mono bg-cyber-cyan/10 text-cyber-cyan px-3 py-1 border border-cyber-cyan/30 uppercase hover:bg-cyber-cyan/20 transition-colors">
               #{tag}
-            </span>
+            </Link>
           ))}
         </div>
 
