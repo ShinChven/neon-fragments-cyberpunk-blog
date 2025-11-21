@@ -9,7 +9,6 @@ export default defineConfig(({ mode }) => {
         port: 3000,
         host: '0.0.0.0',
       },
-      base: '/neon-fragments-cyberpunk-blog/',
       plugins: [react()],
       resolve: {
         alias: {

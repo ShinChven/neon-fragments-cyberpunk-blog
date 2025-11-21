@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { BlogPost } from '../types';
+import { INITIAL_POSTS } from '../constants';
 import PostCard from './PostCard';
 import { Search } from 'lucide-react';
 
 interface PostListProps {
-  posts: BlogPost[];
-  onSelectPost: (post: BlogPost) => void;
-  onPostGenerated: (post: BlogPost) => void;
+  posts?: BlogPost[];
 }
 
-const PostList: React.FC<PostListProps> = ({ posts, onSelectPost, onPostGenerated }) => {
+const PostList: React.FC<PostListProps> = ({ posts = INITIAL_POSTS }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
@@ -44,7 +43,6 @@ const PostList: React.FC<PostListProps> = ({ posts, onSelectPost, onPostGenerate
           <PostCard
             key={post.id}
             post={post}
-            onClick={onSelectPost}
           />
         ))}
       </div>      {/* Load More Mock */}

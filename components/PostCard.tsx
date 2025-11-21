@@ -1,17 +1,24 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { BlogPost } from '../types';
 import { Clock, Hash, ChevronRight, AlertTriangle } from 'lucide-react';
 
 interface PostCardProps {
   post: BlogPost;
-  onClick: (post: BlogPost) => void;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post, onClick }) => {
+const PostCard: React.FC<PostCardProps> = ({ post }) => {
+  // Parse date for permalink: 2077-08-12 04:20
+  const dateObj = new Date(post.date);
+  const year = dateObj.getFullYear();
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const day = String(dateObj.getDate()).padStart(2, '0');
+  const permalink = `/${year}/${month}/${day}/${post.slug}`;
+
   return (
-    <div 
-      onClick={() => onClick(post)}
-      className="group relative bg-cyber-dark border-l-4 border-cyber-gray hover:border-cyber-yellow transition-all duration-300 p-6 cursor-pointer mb-4 overflow-hidden hover:bg-gray-900"
+    <Link
+      to={permalink}
+      className="block group relative bg-cyber-dark border-l-4 border-cyber-gray hover:border-cyber-yellow transition-all duration-300 p-6 cursor-pointer mb-4 overflow-hidden hover:bg-gray-900"
     >
       {/* Background hover effect */}
       <div className="absolute inset-0 bg-gradient-to-r from-cyber-yellow/0 to-cyber-yellow/0 group-hover:from-cyber-yellow/5 group-hover:to-transparent transition-all duration-500"></div>
@@ -43,13 +50,13 @@ const PostCard: React.FC<PostCardProps> = ({ post, onClick }) => {
               </span>
             ))}
           </div>
-          
-          <button className="text-cyber-yellow opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0 flex items-center text-sm font-bold uppercase font-mono">
+
+          <span className="text-cyber-yellow opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0 flex items-center text-sm font-bold uppercase font-mono">
             Read <ChevronRight className="w-4 h-4 ml-1" />
-          </button>
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -1,15 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { BlogPost } from '../types';
+import { INITIAL_POSTS } from '../constants';
 import { ArrowLeft, Share2, ThumbsUp, MessageSquare, AlertOctagon } from 'lucide-react';
 import CyberButton from './CyberButton';
 import GlitchText from './GlitchText';
+import NotFound from './NotFound';
 
-interface PostDetailProps {
-  post: BlogPost;
-  onBack: () => void;
-}
+const PostDetail: React.FC = () => {
+  const { year, month, day, slug } = useParams<{ year: string; month: string; day: string; slug: string }>();
+  const navigate = useNavigate();
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
 
-const PostDetail: React.FC<PostDetailProps> = ({ post, onBack }) => {
+  useEffect(() => {
+    // Simulate fetching or finding the post
+    const foundPost = INITIAL_POSTS.find(p => p.slug === slug);
+    // In a real app, we would also validate the date
+
+    if (foundPost) {
+      setPost(foundPost);
+    }
+    setLoading(false);
+  }, [slug]);
+
+  if (loading) {
+    return <div className="text-white text-center mt-20">DECRYPTING DATA STREAM...</div>;
+  }
+
+  if (!post) {
+    return <NotFound />;
+  }
+
   return (
     <div className="bg-cyber-dark min-h-full relative border-t-4 border-cyber-yellow">
       {/* Header Image / Banner Area */}
@@ -18,7 +40,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ post, onBack }) => {
          <div className="absolute inset-0 bg-gradient-to-t from-cyber-dark to-transparent"></div>
 
          <div className="absolute bottom-4 left-4 md:left-8">
-           <button onClick={onBack} className="flex items-center text-cyber-cyan hover:text-white transition-colors font-mono text-sm mb-2 md:mb-4">
+           <button onClick={() => navigate('/')} className="flex items-center text-cyber-cyan hover:text-white transition-colors font-mono text-sm mb-2 md:mb-4">
              <ArrowLeft className="w-4 h-4 mr-2" /> RETURN_TO_GRID
            </button>
            <h1 className="text-2xl md:text-5xl font-display font-bold text-white uppercase tracking-tighter drop-shadow-[0_0_10px_rgba(252,238,10,0.5)]">
@@ -88,6 +110,4 @@ const PostDetail: React.FC<PostDetailProps> = ({ post, onBack }) => {
       </div>
     </div>
   );
-};
-
-export default PostDetail;
+};export default PostDetail;
