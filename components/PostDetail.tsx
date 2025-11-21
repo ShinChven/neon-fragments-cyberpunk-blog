@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router';
+import { useParams, useNavigate, Link, useLocation } from 'react-router';
+import * as HelmetAsyncPkg from 'react-helmet-async';
 import { BlogPost } from '../types';
 import { useData } from '../contexts/DataContext';
 import { ArrowLeft, Share2, ThumbsUp, MessageSquare, AlertOctagon } from 'lucide-react';
@@ -8,9 +9,13 @@ import GlitchText from './GlitchText';
 import NotFound from './NotFound';
 import CyberDate from './CyberDate';
 
+const { Helmet } = (HelmetAsyncPkg as any).default || HelmetAsyncPkg;
+
+
 const PostDetail: React.FC = () => {
   const { year, month, day, slug } = useParams<{ year: string; month: string; day: string; slug: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { posts } = useData();
 
   // Initialize directly from context for SSR support
@@ -52,11 +57,47 @@ const PostDetail: React.FC = () => {
     return <NotFound />;
   }
 
+  const baseUrl = 'https://neon-fragments.com';
+  const currentUrl = `${baseUrl}${location.pathname}`;
+  const defaultImage = "https://picsum.photos/1200/400";
+  const displayImage = post.image || defaultImage;
+
+  let ogImage = defaultImage;
+  if (post.image) {
+    if (post.image.startsWith('http')) {
+      ogImage = post.image;
+    } else {
+      const cleanPath = post.image.startsWith('/') ? post.image : `/${post.image}`;
+      ogImage = `${baseUrl}${cleanPath}`;
+    }
+  }
+  const plainTextContent = post.content.replace(/<[^>]+>/g, '');
+  const description = post.description || plainTextContent.substring(0, 150) + '...';
+
   return (
     <div className="bg-cyber-dark min-h-full relative border-t-4 border-cyber-yellow">
+      <Helmet>
+        <title>{post.title} | NEON FRAGMENTS</title>
+        <meta name="description" content={description} />
+
+        {/* Open Graph */}
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={currentUrl} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:site_name" content="NEON FRAGMENTS" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImage} />
+      </Helmet>
+
       {/* Header Image / Banner Area */}
       <div className="h-32 md:h-48 w-full bg-zinc-900 relative overflow-hidden">
-         <div className="absolute inset-0 bg-[url('https://picsum.photos/1200/400')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+         <div className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-overlay" style={{ backgroundImage: `url('${displayImage}')` }}></div>
          <div className="absolute inset-0 bg-gradient-to-t from-cyber-dark to-transparent"></div>
 
          <div className="absolute bottom-4 left-4 md:left-8">

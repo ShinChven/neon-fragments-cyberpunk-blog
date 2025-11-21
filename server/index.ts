@@ -26,10 +26,21 @@ server.get('*', (c) => {
   // For home page or other pages, we keep initialPosts empty to avoid large payload
   // The client will fetch the list
 
-  const appHtml = render(path, initialPosts);
+  const { html: appHtml, helmetContext } = render(path, initialPosts);
+  const { helmet } = helmetContext as any;
+
   let html = template
     .replace('<!--app-html-->', appHtml)
     .replace('<!--initial-data-->', `<script>window.__INITIAL_DATA__ = ${JSON.stringify(initialPosts)}</script>`);
+
+  if (helmet) {
+    const helmetHead = `
+      ${helmet.title.toString()}
+      ${helmet.meta.toString()}
+      ${helmet.link.toString()}
+    `;
+    html = html.replace('</head>', `${helmetHead}</head>`);
+  }
 
   // @ts-ignore
   if (import.meta.env.DEV) {

@@ -13,6 +13,7 @@ interface BlogPost {
   slug: string;
   content: string; // HTML content
   description?: string;
+  image?: string;
   excerpt?: string;
   date: string;
   author: string;
@@ -57,6 +58,7 @@ async function buildContent() {
       slug: slug,
       content: htmlContent,
       description: data.description,
+      image: data.image,
       date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
       author: data.author || 'z.shinchven',
       tags: data.tags || [],

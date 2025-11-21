@@ -15,14 +15,14 @@ export default defineConfig(({ mode }) => {
         devServer({
           entry: 'server/index.ts',
           exclude: [
-            /.*\.tsx?$/,
-            /.*\.ts?$/,
-            /.*\.css$/,
-            /.*\.png$/,
-            /.*\.jpg$/,
-            /.*\.jpeg$/,
-            /.*\.gif$/,
-            /.*\.svg$/,
+            /.*\.tsx?($|\?)/,
+            /.*\.ts?($|\?)/,
+            /.*\.css($|\?)/,
+            /.*\.png($|\?)/,
+            /.*\.jpg($|\?)/,
+            /.*\.jpeg($|\?)/,
+            /.*\.gif($|\?)/,
+            /.*\.svg($|\?)/,
             /^\/@.+$/,
             /^\/node_modules\/.*/,
           ]

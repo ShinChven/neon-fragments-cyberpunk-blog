@@ -17,9 +17,8 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const permalink = `/${year}/${month}/${day}/${post.slug}`;
 
   return (
-    <Link
-      to={permalink}
-      className="block group relative bg-cyber-dark border-l-4 border-cyber-gray hover:border-cyber-yellow transition-all duration-300 p-6 cursor-pointer mb-4 overflow-hidden hover:bg-gray-900"
+    <div
+      className="block group relative bg-cyber-dark border-l-4 border-cyber-gray hover:border-cyber-yellow transition-all duration-300 p-6 mb-4 overflow-hidden hover:bg-gray-900"
     >
       {/* Background hover effect */}
       <div className="absolute inset-0 bg-gradient-to-r from-cyber-yellow/0 to-cyber-yellow/0 group-hover:from-cyber-yellow/5 group-hover:to-transparent transition-all duration-500"></div>
@@ -35,7 +34,9 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </div>
 
         <h3 className="text-xl md:text-2xl font-display font-bold text-white group-hover:text-cyber-yellow mb-3 transition-colors uppercase tracking-tight">
-           {post.title}
+           <Link to={permalink} className="before:absolute before:inset-0 focus:outline-none">
+             {post.title}
+           </Link>
         </h3>
 
         <p className="text-gray-400 line-clamp-2 font-sans mb-4 text-sm">
@@ -43,7 +44,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </p>
 
         <div className="flex justify-between items-end">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 relative z-20">
             {post.tags.map(tag => (
               <Link key={tag} to={`/?tag=${encodeURIComponent(tag)}`} className="flex items-center text-[10px] font-mono bg-gray-800 text-cyber-cyan px-2 py-1 border border-gray-700 hover:bg-gray-700 transition-colors">
                 <Hash className="w-2 h-2 mr-1" />
@@ -57,7 +58,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           </span>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

@@ -1,8 +1,12 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router';
+import * as HelmetAsyncPkg from 'react-helmet-async';
 import { AppRoutes } from './AppRoutes';
 import { DataProvider } from './contexts/DataContext';
 import { BlogPost } from './types';
+
+const { HelmetProvider } = (HelmetAsyncPkg as any).default || HelmetAsyncPkg;
+
 
 interface AppProps {
   initialPosts?: BlogPost[];
@@ -11,9 +15,11 @@ interface AppProps {
 function App({ initialPosts = [] }: AppProps) {
   return (
     <DataProvider initialPosts={initialPosts}>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+      <HelmetProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </HelmetProvider>
     </DataProvider>
   );
 }
