@@ -134,9 +134,9 @@ const PostDetail: React.FC = () => {
         </div>
 
         {/* Content */}
-        <article className="prose prose-invert prose-lg max-w-none mb-12">
+        <article className="max-w-none mb-12">
           <div
-            className="text-gray-300 leading-relaxed font-sans"
+            className="cyber-markdown text-gray-300 leading-relaxed font-sans"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
