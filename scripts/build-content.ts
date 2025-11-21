@@ -2,12 +2,25 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
+import { markedHighlight } from 'marked-highlight';
+import hljs from 'highlight.js';
 import fg from 'fast-glob';
 import { DEFAULT_AUTHOR } from '../constants';
 import { UserProfile } from '../types';
 
 const CONTENT_DIR = process.env.CONTENT_DIR || '_posts';
 const OUTPUT_FILE = path.join(process.cwd(), 'services', 'posts.json');
+
+// Configure marked with syntax highlighting
+marked.use(
+  markedHighlight({
+    langPrefix: 'hljs language-',
+    highlight(code, lang) {
+      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+      return hljs.highlight(code, { language }).value;
+    }
+  })
+);
 
 interface BlogPost {
   id: string;

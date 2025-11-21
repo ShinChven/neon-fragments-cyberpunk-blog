@@ -60,6 +60,158 @@ const PostDetail: React.FC = () => {
     }
   }, [slug, posts, post]);
 
+  const contentRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!post) return;
+
+    const enhanceCodeBlocks = () => {
+      if (!contentRef.current) return;
+
+      // Enhance tables with responsive wrapper
+      const tables = contentRef.current.querySelectorAll('table');
+      tables.forEach((table) => {
+        if (table.parentElement?.classList.contains('table-wrapper')) return;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-wrapper mb-6 border border-cyber-gray/50 bg-cyber-dark/30 max-w-full';
+
+        // Apply critical styles inline to ensure they work
+        wrapper.style.display = 'block';
+        wrapper.style.width = '100%';
+        wrapper.style.maxWidth = '100%'; // Ensure wrapper doesn't overflow parent
+        wrapper.style.overflowX = 'auto';
+        // @ts-ignore
+        wrapper.style.webkitOverflowScrolling = 'touch'; // Smooth scrolling on iOS
+        
+        if (table.parentNode) {
+          table.parentNode.insertBefore(wrapper, table);
+          wrapper.appendChild(table);
+        }
+
+        // Ensure table styles don't conflict
+        table.style.marginBottom = '0';
+      });
+
+      // Enhance code blocks with Cyberpunk UI
+      const codeBlocks = contentRef.current.querySelectorAll('pre');
+      codeBlocks.forEach((preElement) => {
+        const pre = preElement as HTMLElement;
+        if (pre.parentElement?.classList.contains('code-block-wrapper')) return;
+
+        // Create wrapper
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper relative group mb-8 border border-cyber-gray bg-[#0a0a0a] max-w-full';
+
+        // Insert wrapper
+        pre.parentNode?.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+
+        // Reset pre styles that interfere
+        pre.style.marginBottom = '0';
+        pre.style.border = 'none';
+        pre.style.background = 'transparent';
+        pre.style.padding = '1.5rem';
+        pre.style.margin = '0'; // Ensure no margin
+        pre.style.maxWidth = '100%'; // Ensure pre doesn't overflow wrapper
+        pre.style.overflowX = 'auto'; // Ensure pre scrolls
+        
+        // Create Toolbar
+        const toolbar = document.createElement('div');
+        toolbar.className = 'flex items-center justify-between px-4 py-2 border-b border-cyber-gray bg-cyber-dark/50 backdrop-blur-sm';
+
+        // Language label
+        const code = pre.querySelector('code') as HTMLElement | null;
+        let lang = 'TEXT';
+        let rawLang = 'text';
+        if (code) {
+          const classes = code.className.split(' ');
+          const langClass = classes.find(c => c.startsWith('language-'));
+          if (langClass) {
+            rawLang = langClass.replace('language-', '').toLowerCase();
+            lang = rawLang.toUpperCase();
+          }
+        }
+
+        const langLabel = document.createElement('span');
+        langLabel.className = 'text-xs font-mono text-cyber-yellow';
+        langLabel.innerText = `// ${lang}`;
+
+        const actions = document.createElement('div');
+        actions.className = 'flex items-center space-x-4';
+
+        // Wrap Button
+        const wrapBtn = document.createElement('button');
+        wrapBtn.className = 'text-xs font-mono text-gray-400 hover:text-cyber-cyan transition-colors flex items-center cursor-pointer';
+
+        // Check if should wrap by default
+        const defaultWrapped = ['text', 'txt', 'markdown', 'md', 'plaintext'].includes(rawLang);
+        let isWrapped = defaultWrapped;
+
+        if (isWrapped) {
+             pre.style.whiteSpace = 'pre-wrap';
+             pre.style.wordBreak = 'break-word';
+             wrapBtn.innerHTML = '[ UNWRAP ]';
+             wrapBtn.classList.add('text-cyber-cyan');
+        } else {
+             wrapBtn.innerHTML = '[ WRAP ]';
+        }
+
+        wrapBtn.onclick = () => {
+          isWrapped = !isWrapped;
+          if (isWrapped) {
+            pre.style.whiteSpace = 'pre-wrap';
+            pre.style.wordBreak = 'break-word';
+            wrapBtn.innerHTML = '[ UNWRAP ]';
+            wrapBtn.classList.add('text-cyber-cyan');
+          } else {
+            pre.style.whiteSpace = 'pre';
+            pre.style.wordBreak = 'normal';
+            wrapBtn.innerHTML = '[ WRAP ]';
+            wrapBtn.classList.remove('text-cyber-cyan');
+          }
+        };
+
+        // Copy Button
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'text-xs font-mono text-gray-400 hover:text-cyber-cyan transition-colors flex items-center cursor-pointer glitch-hover';
+        copyBtn.innerHTML = '[ COPY ]';
+        copyBtn.onclick = async () => {
+          const text = code?.innerText || pre.innerText;
+          try {
+            await navigator.clipboard.writeText(text);
+            copyBtn.innerHTML = '[ COPIED! ]';
+            copyBtn.classList.add('text-cyber-cyan');
+
+            // Add temporary glitch effect on click
+            copyBtn.style.animation = 'glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite';
+
+            setTimeout(() => {
+              copyBtn.innerHTML = '[ COPY ]';
+              copyBtn.classList.remove('text-cyber-cyan');
+              copyBtn.style.animation = '';
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        };
+
+        actions.appendChild(wrapBtn);
+        actions.appendChild(copyBtn);
+
+        toolbar.appendChild(langLabel);
+        toolbar.appendChild(actions);
+
+        wrapper.insertBefore(toolbar, pre);
+      });
+    };
+
+    // Run immediately and after a short delay to ensure DOM is ready
+    enhanceCodeBlocks();
+    const timer = setTimeout(enhanceCodeBlocks, 100);
+    return () => clearTimeout(timer);
+  }, [post]);
+
   if (loading) {
     return <div className="text-white text-center mt-20">DECRYPTING DATA STREAM...</div>;
   }
@@ -136,7 +288,8 @@ const PostDetail: React.FC = () => {
         {/* Content */}
         <article className="max-w-none mb-12">
           <div
-            className="cyber-markdown text-gray-300 leading-relaxed font-sans"
+            ref={contentRef}
+            className="cyber-markdown text-gray-300 leading-relaxed font-sans max-w-full"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
