@@ -21,10 +21,12 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm'
 
+    # package-lock.json is gitignored, so there is no lock file to `npm ci` from
+    # or to key setup-node's cache on. react-helmet-async still pins React <=18,
+    # so peer resolution needs the same flag the deploy image uses.
     - name: Install dependencies
-      run: npm ci
+      run: npm install --legacy-peer-deps
 
     - name: Create empty posts.json for build
       # We need posts.json to exist for the build to succeed (if it's imported/read)
@@ -47,10 +49,24 @@ jobs:
         cp package.json release/
         cp package-lock.json release/
         cp Dockerfile release/
+        cp tsconfig.json release/
+        cp constants.ts types.ts release/
         cp -r dist release/
-        mkdir -p release/services
+        # The deploy image re-runs `npm run build:content` against its own _posts,
+        # so ship the content pipeline sources it imports, not just an empty dir.
+        cp -r scripts release/
+        cp -r services release/
         echo "[]" > release/services/posts.json
         mkdir -p release/images
+
+    - name: Verify Release Artifact Can Build Content
+      # Guards against the artifact missing a module that build-content.ts imports
+      # (e.g. an empty services/), which otherwise only fails in the deploy pipeline.
+      run: |
+        ln -s "$PWD/node_modules" release/node_modules
+        (cd release && npm run build:content)
+        rm release/node_modules
+        echo "[]" > release/services/posts.json
 
     - name: Zip Release
       run: |
